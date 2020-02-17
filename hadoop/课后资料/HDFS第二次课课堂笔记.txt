@@ -1,0 +1,512 @@
+来的同学先看一下网络如何？
+声音、画面都如何？
+
+
+
+农夫三拳 19:48:08
+没有zk集群还能用吗
+现在用的hadoop集群是3节点的，非高可用的集群，用不到zookeeper集群；namenode只有一个，resourcemanager也只有一个
+只有后边，讲完zookeeper后，如果要搭建高可用HA的hadoop集群，才需要与zookeeper集群相互配合
+
+白强 19:49:41
+老师，我们后面开发外网下载依赖的机会还多不多，这两天下载包头都大了
+其实，一般公司里会自己搭建maven仓库；开发的时候，直接从自己公司的maven仓库下载即可；所以，不会再这么麻烦
+
+xxzx_6821222 19:51:15
+阿里的也挺快的 
+阿里aliyun仓库是快，如果，下载的是apache版本的相关的jar包的话，推荐使用这个；
+但是，如果我们使用的是cdh的版本，由于版本问题，aliyun或中央仓库，没有我们想要的包；只能去cdh的仓库下载
+maven -> settings.xml
+	<mirror>
+		<id>alimaven</id>
+		<name>aliyun maven</name>
+		<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		<mirrorOf>central</mirrorOf>        
+	</mirror>
+
+sinc 19:52:41
+cdh jar 包我试了下，配置正常的话 ，40分钟左右可以下载完 
+
+
+今天晚上的内容比较重要，干活多，可能会拖堂，半小时
+22点之后，如果有事的同学或者困的同学，可以先下线，剩下的看录播
+
+安装linux的时候，磁盘空间、内存、系统linux -> centos7 64
+网络配置：
+	1、vmware网络
+	2、windows网络or mac 配置成同网段、同网关的就可以
+	3、linux虚拟机
+强调：
+	只有初次搭建hadoop集群，需要namenode格式化一次；
+	以后，不要再格式化
+启动集群：
+	主节点运行start-dfs.sh start-yarn.sh
+关闭笔记本的正确姿势：
+	1、关闭hadoop集群 node01 stop-dfs.sh stop-yarn.sh
+	2、关闭虚拟机 shutdown -h now
+	3、关闭笔记本
+
+Eric Song 20:04:24
+可以用start-all.sh吗？
+过时的；但是，可以用
+
+大家回想一下，hdfs三角色namenode、datanode、secondarynamenode的作用分别是什么？
+今晚会在此基础上进行深入讲解
+
+hdfs的使用，有两种方式：
+1、shell
+2、api 编程
+
+两种风格：
+hadoop fs开头的
+hdfs dfs 开头的
+
+对hdfs的操作
+很重要的技巧：[hadoop@node01 ~]$ hadoop fs -help ls
+
+输入hadoop fs 或hdfs dfs，回车，查看所有的HDFS命令
+许多命令与linux命令有很大的相似性，学会举一反三
+有用的help，如查看ls命令的使用说明：hadoop fs -help ls
+绝大多数的大数据框架的命令，也有类似的help信息
+
+
+获得一些配置相关的命令
+	hdfs getconf -confkey 
+管理员相关的命令
+	
+文件系统检查相关的命令
+	hdfs fsck 
+	查看一个文件有多少个block，分别存储在哪些datanode上
+	
+
+安全模式
+99.9% block满足最小副本数
+退出安全模式
+
+windows操作系统需要配置一下hadoop；
+	从windows访问虚拟机中的hadoop集群，跨平台了
+	winutils.exe
+mac本质上是unix系统，不需要配；本质是linux
+
+xxzx_6653472 20:42:43
+既然安全模式是只读的，那么怎么执行删除损坏的block，来退出安全模式呢 
+[hadoop@node01 ~]$ hdfs fsck -list-corruptfileblocks
+Connecting to namenode via http://node01:50070/fsck?ugi=hadoop&listcorruptfileblocks=1&path=%2F
+The filesystem under path '/' has 0 CORRUPT files
+[hadoop@node01 ~]$ hdfs fsck -delete 
+
+通过copyFromLocal方法，上传文件
+还可以通过刘的方式，上传
+
+xxzx_9368308 20:58:15
+小文件合并用命令怎么操作？
+hdfs dfs -appendToFile xxx 
+
+[-chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...]
+        [-chown [-R] [OWNER][:[GROUP]] PATH...]
+hdfs dfs -chown bruce:bruce /call.sh
+hdfs dfs -chmod 777 /call.sh
+
+
+副本因子
+hdfs dfs -setrep 4 /call.sh 
+
+四九 21:02:15
+128m能配置吗 
+集群的任何属性都可以配置
+找到属性名，及所在的xml，设置就行
+
+Eric Song 21:02:58
+Java程序并发执行写文件的时候，怎么写呀？
+如果是向hdfs同一个文件，并发写
+不支持
+
+Eric Song 21:08:50
+文件的副本数和datenode个数不一致可以吗？ 
+可以；跟datanode个数没关系
+
+暴走的老代 21:09:34
+可以 如果副本数大于datanode数 就会存在一个机器存在多个副本 
+不会；这样没有意义
+
+datanode 3 -> replication 4
+
+Freddy 21:10:05
+有什么格式的文件是不能分割成block的吗？？ 
+比如使用了不可分割的压缩算法，对文件做了压缩
+
+汪志良 21:10:25
+dn是不是相当于主机节点？ 
+从节点
+
+Mao 21:10:26
+副本因子 通过什么策略 来决定落到哪个datanode上 
+下边讲
+
+http://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.14.2/
+
+hdfs 命令 都必须在node01上吗
+在安装了hadoop的任何节点都可以
+
+xxzx_9368308 21:11:41
+刚用 hdfs fsck 操作删除block时，是安全模式也能删吗 
+安全模式下无法删除文件，只读的
+
+吴凡 21:12:14
+hdfs文件所属用户和用户组不需要和Linux中真实用户和用户组对应吗 
+
+四九 21:16:11
+hadoop能控制java连接进来的，是安全模式吗？？ 
+试一试
+
+client调用DistributedFileSystem.create()
+ rpc 远程过程调用namenode的create()
+ 在文件系统创建一个空的文件
+将操作记录在editlog中
+
+梁宇晟 21:36:04
+就是所有dn都是对客户端暴露的吗？
+hdfs dfs -put xx /
+
+xxzx_4580434 21:36:06
+如果datanode与datanode之间的传输断了，怎么办？重传还是数据有缺失？如果重传的话，重传机制是什么 
+如何容错？
+
+xxzx_5641682 21:36:25
+datanode是用什么样的数据结构保存的
+二进制文件
+
+Freddy 21:36:29
+大文件切分为block，是在client做的吗？怎么做 
+按照128为单位进行切分
+
+代树理 21:36:53
+上传的文件被切分多个block，那文件和block有映射关系吗？
+有
+
+暴走的老代 21:37:00
+dn1收到client传输的一个Packet之后，是要等dn2以及dn3传输成功之后才向client返回应答，还是只要dn1保存成功就返回应答，如果等dn2 和dn2 应答，会不会浪费时间 
+不会
+
+xxzx_7984557 21:37:12
+为什么block要一个一个dn传递，不一次性传到目的dn，多一次传输不就多一次问题吗？ 
+如果这样做，client压力很大，效率低
+
+
+++++start
+qingyi 21:37:32
+客户端通过rpc调用namenode的create的方法是通过代理吗 
+对的，动态代理；可以了解一下什么是RPC
+
+xxzx_8922897 21:38:08
+二进制节约磁盘空间 
+
+农夫三拳 21:38:30
+rpc是进程间的通讯
+对
+
+何垣谛 21:39:15
+最左边得datanode中间得箭头是什么意思 
+
+梁宇晟 21:39:19
+客户端是直接和dn建立链接的？那不是没有办法只暴露nn？
+看写数据的流程
+
+kkb同学 21:39:36
+一个chunk等于一个packet吗? 
+答：一个chunk+checksum = 516byte
+一个packet=64kb
+一个packet中包含许多chunk及对应的checksum
+
+杨晓宇 21:39:44
+package在什么情况下会出现校验失败情况？丢包，tcp不是可以保证重传吗？
+用的不是tcp，不适合hdfs
+
+xxzx_8922897 21:39:54
+感觉是一个packet包含多个chunk 
+直到packet存储不了下一个chunk为止，不用纠结具体的数字
+
+何垣谛 21:40:33
+网络传输不是需要做校验，，怎么有通道直接传输 
+hdfs如此设计的
+
+xxzx_6821222 21:41:00
+获取文件的时候是怎么知道他的顺序的啊 
+这些是元数据；所以读取文件时，namenode直到这个文件有几个block，每个block是属于第几个
+
+qingyi 21:41:05
+检验算法crc不是64长度吗，checksum为什么是4字节 
+因为hdfs使用的是crc-32c做数据校验，结果是32位，即4字节
+
+
+杨晓宇 21:41:22
+这些package是顺序传输，还是无序并发传输？
+有序发送；每个packet，在hdfs中是包装成一个对象，其中有个属性seqno，用于记录是第几个packet
+
+刘勇-大数据005期 21:41:27
+datanode是如何进行数据校验的，每个datanode都会校验一遍吗 
+datanode接受一个packet后，对里边的数据做crc32校验，在packet中，每个chunk都有对应的checksum值1（），那么datanode
+做校验时，对此chunk计算一个新的checksum值2，值1与值2相等说明此chunk没问题；如果packet中所有的chunk都没问题，那么此packet没问题
+
+shanshan 21:42:00
+哪一部分是最核心环节？ 
+写数据是一个完整的流程；面试很有可能会问到
+
+四九 21:42:02
+传输中进程是一直被阻塞的吗 
+什么进程？
+
++++end
+
+xxzx_9958089 21:44:23
+data queue里全是packet吗
+
+xxzx_9958089 21:44:54
+packet由什么组成
+
+Carmen 21:47:51
+chunk这个512字节是怎么来的 
+源码里设置的
+
+xxzx_8922897 21:48:06
+集群有100个dn，它们都会串成一串？ 
+block有3个副本，所以每个block只存储在3个datanode上，所以这3个datanode形成管道piplline即可
+
+暴走的老代 21:50:23
+如果dn2 断了 dn3 上应该不会有block了吧 
+有
+
+梁宇晟 21:50:27
+dn2恢复之后坏数据什么时候删呢？
+dn2回复后，通过心跳与namenode通信；namenode发现dn2上有个block的版本是老的，通过心跳返回命令，告知dn2删除此block
+
+Freddy 21:50:31
+ack超时时间？ 
+可以看源码
+
+xxzx_6653472 21:50:41
+不是三个datanode都完成后一起返回的么，dn2断了 dn1 dn2 dn3的结果都没有吧？ 
+数据还在，只不过ack返回不了client
+
+qingyi 21:51:08
+dn2有问题，dn1和dn3是重新获取整个block还是继续获取 
+在原有的基础之上，继续接受客户端发送过来的packet
+
+======start
+吴凡 21:51:09
+如果1个packet在传输到dn3的时候丢包校验失败，dn1和dn2已接收到的数据会怎么处理 
+packet再重新沿管道传输一遍
+
+xxzx_3517504 21:52:03
+如果出现了datanode死掉的情况,client传递block的进程和添加新node是同步进行还是暂停等node重建后再继续进行?
+等待新pipeline创建好后，继续传输
+
+xxzx_8101353 21:52:04
+dn2损坏了后，在dn1上的所有的block都要拷贝到新的dn上吗？ 
+对的，因为他们要保持数据一致后，再将block剩余的数据，沿pipeline传输
+
+xxzx_6821222 21:52:10
+那3个datanode组成是怎么选的啊 
+由namenode自动决定；不需要程序员考虑，我们只是用户，框架用起来很简单就是，hdfs dfs -put xxx /xx
+大概是namenode根据各datanode的磁盘使用率及网络远近，决定返回哪三个dn给client
+
+xxzx_9958089 21:52:13
+课件里的3个block是三个副本吗
+对的，指的是一个block的三个副本
+
+杨晓宇 21:52:14
+client调用nn的 update更新版本信息时，nn通知dd更新版本，还是后续流程更新的时间戳？
+后续再创建新的pipeline时，更新版本
+
+xxzx_8464450 21:52:19
+调用getadditiondatanone就创建新dn吗，如果挂了两个dn呢 
+不是创建新的dn，是申请新的dn用于保存当前写入的block的数据；如果挂了两个，也是调用此方法，namenode给客户端返回两个新的dn，加入加入到
+
+xxzx_9958089 21:52:43
+能在讲下怎么校验么
+上边已经回答了，如果还不清楚，私聊我；
+你是谁？加你微信
+
+qingyi 21:53:16
+将dn1或者dn3上的block传给新的dn,应该是nn控制的吧 
+不是，是客户端主导的，通过一个DataTransforProtocol完成
+
+xxzx_8922897 21:54:07
+应用层心跳协议 
+
+xxzx_9958089 21:54:16
+校验是谁跟谁校验
+
+xxzx_6821222 21:55:11
+you 5个datanode如果只要3个副本的话这个要怎么选啊 
+怎么选？选什么？
+任然是写入数据是，namenode根据整个hdfs集群datanode节点的磁盘使用率及与client的网络距离，选出3个dn
+
+======
+
+xxzx_9368308 22:00:10
+怎么判断最近呢 
+网路拓扑
+
+
+kkb同学 22:01:45
+dn1挂掉了什么时候恢复？ 
+运维人员回复
+
+路少公 22:03:57
+如果blk1存在dn1，blk2备份在dn1，要读blk1和blk2，可以直接全部在dn1里面取吗 
+如果说client、blk1、blk2都在同一个节点（datanode、client）
+
+xxzx_3517504 22:04:17
+package校验不通过不一定是文件损坏吧?万一是传输过程的问题呢?这种情况下也是向nn返回文件损坏信息并从备份开始读取么? 
+重试，再不行，报告namenode，再换个datanode读取block数据
+
+刘勇-大数据005期 22:05:50
+block是存在nn磁盘中的，什么会造成block损坏 
+位衰减
+
+刘勇-大数据005期 22:31:48
+每次checkpoint,都会生成一个新的fsimage文件吗 
+是的 
+
+暴走的老代 22:31:49
+NameNode是什么时机将内存的元数据信息写入FSImage文件的,是在服务停止的时候吗？ 
+在checkpoint时
+
+namenode挂了之后，hdfs就停止对外服务，灾难
+hadoop ha方案 +zookeeper
+
+墨已成土 22:31:52
+防止重启的再次加载有元数据丢失
+
+四九 22:31:53
+SecondaryNameNode就是为了生成dkpt，然后namenode转成fsImage吗 
+对的，主要目的是：减少edits.log中的记录数，加快namenode的回复速度
+
+林泽斌 22:31:57
+能理解，但是记不住 
+流程比较多
+建议自己手绘一遍
+
+吴凡 22:31:59
+nn的fsimage_0是什么时候生成的 
+namenode格式化时
+
+xxzx_8922897 22:31:59
+近期数据放editlog，远期数据放fsimage
+可以
+
+xxzx_7196030 22:32:12
+secondaryNameNode挂了怎么办
+挂了，运维就恢复
+
+xxzx_6860847 22:33:00
+namenode 1 挂掉会启2namenode吗？此时namenode数据应该是在哪里，肯定会丢最后一此checkpoint之后的数据对吗？
+不会丢失
+
+xxzx_9958089 22:33:22
+secondarynode 生成的和原来的namenode 区别在哪
+没区别，都是元数据；只不过是将namenode原来的edits.log及fsimage中的元数据，合并到一个新的fsimage中（元数据更多）
+
+xxzx_3517504 22:33:22
+如果元数据过多超过内存上限会如何?写入硬盘么? 
+肯定不会让他发生这种情况，如果是这样，运维就该卷铺盖走人了 
+想方设法对集群扩容-：增加内存条；或者使用联邦的机制 
+
+Freddy 22:33:30
+namenode挂了后，是secondarynn作为namenode了吗？
+secondarynn是可以的；也可以将namenode启动后，恢复原数据
+
+
+=====
+✨卡米✨ 22:34:27
+secondaryNameNode需要建在另外的服务器上吗？还是只要和namenode不同就可以
+因为secondarynamenode也需要占据大量的内存，所以肯定是跟namenode不同的机器更好
+
+不懂就问168 22:34:37
+namenode内存中包含fsimage和edits.log两部分吗？ 
+对的
+我们对hdfs做的所有操作，增、删、改操作，元数据都会同步更新到namenode内存中
+
+
+不懂就问168 22:35:33
+生产新的fsimage,老的会删除吗 
+会留两个最新的，老的删除
+
+xxzx_4580434 22:36:21
+后面可以做一下各个框架高可用、高容错机制的对比吗？ 
+会有的，在讲完zookeeper后，会将zookeeper+hadoop做高可用的机制；时间不够就录播给出
+
+xxzx_8922897 22:36:54
+后面还想听一下容量规划 
+好的，没问题，先记下来
+
+四九 22:37:27
+namenode上是有多个fsimage还是一个fsiamge？ 
+保留最新的两个
+namenode节点的/kkb/install/hadoop-2.6.0-cdh5.14.2/hadoopDatas/namenodeDatas/current可以看出来
+
+刘勇-大数据005期 22:37:28
+数据恢复的时候是通过执行editlog里面的命令，还是直接使用fsImage里面的备份数据 
+先将最新的fsimage中的数据，直接读入内存；在对最新的edits.log中做的操作记录，一个操作，一个操作重新执行一遍
+结束后，内存的元数据就恢复了
+
+sinc 22:37:43
+回放edits.log 会产生新的事务吗？ 
+不会的，记录的每个事务都有事务编号，回访时，还是用原来的事务编号
+
+xxzx_7581789 22:38:10
+secondaryNamenode 冷备份在工作中不推荐使用，只是理解吗？ 
+对的；但是这个原理得了解；因为后边讲的高可用原理在此基础上演进出来的
+
+xxzx_8922897 22:38:23
+HA：高可用 
+
+库娅鸽 22:39:29
+老师太棒了 连续三个小时 
+
+
+李小包 22:07:47
+客户端不能并发读吗？这样不是更快吗 
+读一个文件时，只会从前，往后一个一个block的读
+读多个文件，可以
+
+lijiajin 22:08:23
+客户端如果1万人来访问，读和查询，那么不支持并发，是不是意味着排队访问？ 
+hdfs dfs -get 就是一个客户端
+
+Eric Song 22:08:34
+重试次数可以配置？
+大数据框架可配置性非常强
+
+博子 22:09:58
+读取也是跟写的时候一样64k的读吗？ 
+读数据，一个packet一个读 ， 64kb
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
