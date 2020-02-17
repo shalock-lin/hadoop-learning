@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/coprocessor/coprocessor.iml" filepath="$PROJECT_DIR$/coprocessor/coprocessor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hbase-bd05.iml" filepath="$PROJECT_DIR$/hbase-bd05.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hbase_day01/hbase_day01.iml" filepath="$PROJECT_DIR$/hbase_day01/hbase_day01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hbase_day03/hbase_day03.iml" filepath="$PROJECT_DIR$/hbase_day03/hbase_day03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hbase_weibo/hbase_weibo.iml" filepath="$PROJECT_DIR$/hbase_weibo/hbase_weibo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hbasemr/hbasemr.iml" filepath="$PROJECT_DIR$/hbasemr/hbasemr.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,400 @@
+声音、画面是否ok？
+那我这的网路是ok的
+
+hive函数、hive的数仓案例，这些大家有没有看视频？有没有自己动手写？
+
+哲程是大腿😘 19:52:47
+老师数仓搭建的数有没有推荐？
+我下去找一些
+
+刘勇-大数据005期 19:55:35
+log_orc的block_size为什么是256M呀？ 
+
+农夫三拳 19:56:14
+dataX也是etl工具吧 
+是的
+
+胖虎ヾ 19:58:20
+参数传递录播的课后作业，自定义UDF 其他字段（movie，rate，uid）可以利用自定义函数获取结果，但是 timeStamp的自定义函数为null 
+
+林志华 19:58:42
+hbase在面试问的挺多的
+我个人觉得，hbase是属于大数据框架中最难的一个
+
+-----------------
+简单回顾一下hive
+hive的压缩
+	企业中用的比较的多的lzo、snappy两种
+hive的存储
+	行式存储
+		textfile、sequencefile
+	列式
+		orc、parquet
+hive的企业级调优
+11条- 如果理解不是很深刻的话，先背下来再说
+
+hive函数、hive数仓案例一定要自己动手做
+
+-----------------------
+hbase框架
+3次课
+
+hbase
+h+base => hadoop + database hbase是hadoop的database的数据库
+hbase也是来源于google的一片论文bigtable；
+nosql的非关系型的数据库
+非关系型的数据库：
+	mongodb、redis、cassandra
+	
+hbase的数据：
+	数据底层存储在hdfs上边；
+
+hdfs：擅长一次写入，多次读取（不擅长随机读写）；存储大文件
+hbase：擅长随机的读写数据
+hbase是如何做到的？
+
+使用场景：
+需要==实时读写随机访问==超大规模数据集时
+	hbase进行读数据时，时延很低ms级别相应
+	hbase能够有高的写数据的吞吐量
+
+hbase特点：
+hbase列式存储
+	列式存储中，null的数据，不占据磁盘空间
+存储稀疏表
+	表中有很多的列的值是null
+存多版本的数据
+	hbase表中的列的值，可以存储多个版本
+数据类型单一：
+	hbase里边的数据全部是以字节数据的格式存储
+	
+	
+<configuration>
+	<property>
+		<!-- hbase数据，最终存储在hdfs的路径 -->
+		<name>hbase.rootdir</name>
+		<value>hdfs://node01:8020/hbase</value>  
+	</property>
+	<property>
+		<name>hbase.cluster.distributed</name>
+		<value>true</value>
+	</property>
+	<!-- 0.98后的新变动，之前版本没有.port,默认端口为60000 -->
+	<property>
+		<name>hbase.master.port</name>
+		<value>16000</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>node01,node02,node03</value>
+	</property>
+    <!-- 此属性可省略，默认值就是2181 -->
+	<property>
+		<name>hbase.zookeeper.property.clientPort</name>
+		<value>2181</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>
+		<value>/kkb/install/zookeeper-3.4.5-cdh5.14.2/zkdatas</value>
+	</property>
+    <!-- 此属性可省略，默认值就是/hbase -->
+	<property>
+		<name>zookeeper.znode.parent</name>
+		<value>/hbase</value>
+	</property>
+</configuration>
+
+ln -s /kkb/install/hadoop-2.6.0-cdh5.14.2/etc/hadoop/core-site.xml  /kkb/install/hbase-1.2.0-cdh5.14.2/conf/core-site.xml
+
+hbase和mysql中的表模型有相似之处，有不同之处
+rowkey行键
+	每行数据存储在hbase中后，数据按照rowkey的字典序排序
+		a001
+		b002
+	rowkey能够最大达到64kb，但是，实际工作中rowkey设计时10-100字节间
+列族：
+	创建表的时候，至少指定一个列族
+	create 'user', 'info'
+列
+	创建表时，不需要指定有哪些列
+	是在向表中添加数据的时候，自定列及对应的值
+	列族前缀:列名的方式指定：userInfo:age
+cell
+	存储的数据是字节数组的方式存储
+多版本
+	版本本质上是存储数据时的时间戳，当然也可以指定其他时间
+	
+albert 20:51:49
+Region控制表多大可以配置吧 
+高可配置性
+
+梁小胖 20:51:56
+切分是怎么切分的？那是对应多个表数据吗？
+后边讲
+不急
+
+进入hbase shell
+在任意一个节点运行hbase shell即可
+
+命令行
+hbase(main):003:0* help
+HBase Shell, version 1.2.0-cdh5.14.2, rUnknown, Tue Mar 27 13:31:54 PDT 2018
+Type 'help "COMMAND"', (e.g. 'help "get"' -- the quotes are necessary) for help on a specific command.
+Commands are grouped. Type 'help "COMMAND_GROUP"', (e.g. 'help "general"') for help on a command group.
+
+COMMAND GROUPS:
+  Group name: general
+  Commands: status, table_help, version, whoami
+
+  Group name: ddl
+  Commands: alter, alter_async, alter_status, create, describe, disable, disable_all, drop, drop_all, enable, enable_all, exists, get_table, is_disabled, is_enabled, list, locate_region, show_filters
+
+  Group name: namespace
+  Commands: alter_namespace, create_namespace, describe_namespace, drop_namespace, list_namespace, list_namespace_tables
+
+  Group name: dml
+  Commands: append, count, delete, deleteall, get, get_counter, get_splits, incr, put, scan, truncate, truncate_preserve
+
+  Group name: tools
+  Commands: assign, balance_switch, balancer, balancer_enabled, catalogjanitor_enabled, catalogjanitor_run, catalogjanitor_switch, close_region, compact, compact_mob, compact_rs, flush, major_compact, major_compact_mob, merge_region, move, normalize, normalizer_enabled, normalizer_switch, split, trace, unassign, wal_roll, zk_dump
+
+  Group name: replication
+  Commands: add_peer, append_peer_tableCFs, disable_peer, disable_table_replication, enable_peer, enable_table_replication, get_peer_config, list_peer_configs, list_peers, list_replicated_tables, remove_peer, remove_peer_tableCFs, set_peer_tableCFs, show_peer_tableCFs, update_peer_config
+
+  Group name: snapshots
+  Commands: clone_snapshot, delete_all_snapshot, delete_snapshot, list_snapshots, restore_snapshot, snapshot
+
+  Group name: configuration
+  Commands: update_all_config, update_config
+
+  Group name: quotas
+  Commands: list_quotas, set_quota
+
+  Group name: security
+  Commands: grant, list_security_capabilities, revoke, user_permission
+
+  Group name: procedures
+  Commands: abort_procedure, list_procedures
+
+  Group name: visibility labels
+  Commands: add_labels, clear_auths, get_auths, list_labels, set_auths, set_visibility
+
+  Group name: rsgroup
+  Commands: add_rsgroup, balance_rsgroup, get_rsgroup, get_server_rsgroup, get_table_rsgroup, list_rsgroups, move_servers_rsgroup, move_tables_rsgroup, remove_rsgroup
+
+SHELL USAGE:
+Quote all names in HBase Shell such as table and column names.  Commas delimit
+command parameters.  Type <RETURN> after entering a command to run it.
+Dictionaries of configuration used in the creation and alteration of tables are
+Ruby Hashes. They look like this:
+
+  {'key1' => 'value1', 'key2' => 'value2', ...}
+
+and are opened and closed with curley-braces.  Key/values are delimited by the
+'=>' character combination.  Usually keys are predefined constants such as
+NAME, VERSIONS, COMPRESSION, etc.  Constants do not need to be quoted.  Type
+'Object.constants' to see a (messy) list of all constants in the environment.
+
+If you are using binary keys or values and need to enter them in the shell, use
+double-quote'd hexadecimal representation. For example:
+
+  hbase> get 't1', "key\x03\x3f\xcd"
+  hbase> get 't1', "key\003\023\011"
+  hbase> put 't1', "test\xef\xff", 'f1:', "\x01\x33\x40"
+
+The HBase shell is the (J)Ruby IRB with the above HBase-specific commands added.
+For more on the HBase Shell, see http://hbase.apache.org/book.html
+	
+	
+help 命令
+
+建表：一个表名，列族：至少一个（一般不会超过两个）
+eates a table. Pass a table name, and a set of column family
+specifications (at least one), and, optionally, table configuration.
+Column specification can be a simple string (name), or a dictionary
+(dictionaries are described below in main help output), necessarily 
+including NAME attribute. 
+Examples:
+
+Create a table with namespace=ns1 and table qualifier=t1
+  hbase> create 'ns1:t1', {NAME => 'f1', VERSIONS => 5}
+
+Create a table with namespace=default and table qualifier=t1
+  hbase> create 't1', {NAME => 'f1'}, {NAME => 'f2'}, {NAME => 'f3'}
+  hbase> # The above in shorthand would be the following:
+  hbase> create 't1', 'f1', 'f2', 'f3'
+  hbase> create 't1', {NAME => 'f1', VERSIONS => 1, TTL => 2592000, BLOCKCACHE => true}
+  hbase> create 't1', {NAME => 'f1', CONFIGURATION => {'hbase.hstore.blockingStoreFiles' => '10'}}
+  hbase> create 't1', {NAME => 'f1', IS_MOB => true, MOB_THRESHOLD => 1000000, MOB_COMPACT_PARTITION_POLICY => 'weekly'}
+
+Table configuration options can be put at the end.
+Examples:
+
+  hbase> create 'ns1:t1', 'f1', SPLITS => ['10', '20', '30', '40']
+  hbase> create 't1', 'f1', SPLITS => ['10', '20', '30', '40']
+  hbase> create 't1', 'f1', SPLITS_FILE => 'splits.txt', OWNER => 'johndoe'
+  hbase> create 't1', {NAME => 'f1', VERSIONS => 5}, METADATA => { 'mykey' => 'myvalue' }
+  hbase> # Optionally pre-split the table into NUMREGIONS, using
+  hbase> # SPLITALGO ("HexStringSplit", "UniformSplit" or classname)
+  hbase> create 't1', 'f1', {NUMREGIONS => 15, SPLITALGO => 'HexStringSplit'}
+  hbase> create 't1', 'f1', {NUMREGIONS => 15, SPLITALGO => 'HexStringSplit', REGION_REPLICATION => 2, CONFIGURATION => {'hbase.hregion.scan.loadColumnFamiliesOnDemand' => 'true'}}
+  hbase> create 't1', {NAME => 'f1', DFS_REPLICATION => 1}
+
+You can also keep around a reference to the created table:
+
+  hbase> t1 = create 't1', 'f1'
+
+插入数据：
+	表、
+	
+查询数据有两种方式
+get
+	查询一整行
+	查询若干列族下的数据
+	查询某些列下的数据
+scan
+
+
+PMKTEST 21:08:53
+一个列就是一个表？列字段是固定的吗？ 
+不是
+建表：肯定要指定列族
+create 'user', 'info'
+当添加数据的时候，指定列（添加列）与对应的值
+put 'user', 'rk0001', 'info:age', 12
+动态添加列
+
+
+annuoa 21:09:30
+创建表的时候列族中 VERSION=>3是可以记录3个版本的意思吗？ 
+对
+
+林崇辉 21:09:40
+管理hbase有什么工具吗？就像用dbeaver管理hive一样 
+图形化界面：hue
+
+蒋子杰 21:10:44
+这命令可读性太差了 
+是有点；但是，也得会
+
+哲程是大腿😘 21:10:46
+version 3 就是三个版本，多了会把最老的删掉 
+对的
+超出的版本，在特定时机会被删除（大合并）
+
+Eric Song 21:10:49
+怎么查看表结构呀？ 
+hbase(main):008:0> describe 'user'
+Table user is ENABLED                                                            
+user                                                                             
+COLUMN FAMILIES DESCRIPTION                                                      
+{NAME => 'info', BLOOMFILTER => 'ROW', VERSIONS => '3', IN_MEMORY => 'false', KEE
+P_DELETED_CELLS => 'FALSE', DATA_BLOCK_ENCODING => 'NONE', TTL => 'FOREVER', COMP
+RESSION => 'NONE', MIN_VERSIONS => '0', BLOCKCACHE => 'true', BLOCKSIZE => '65536
+', REPLICATION_SCOPE => '0'}                                                     
+1 row(s) in 0.0630 seconds
+
+雷宏扬 21:14:19
+插入数据只能一个一个插？怎么一次插入一整条？ 
+只能这样
+
+PMKTEST 21:16:23
+感觉info就是一个表 
+hbase就是这样设计
+
+林同学 21:18:53
+这个列族设计的意义在哪额 
+设计如此
+一般将一起存取的数据放到一个列族
+
+scan
+put更新数据
+
+hbase(main):039:0* help 'drop'
+help命令  
+help '命令'
+
+create
+put
+get
+scan
+指定过滤器
+delete删除表
+
+段宁建--大数据五期 21:23:48
+应该是为了加快数据处理的过程 
+
+段宁建--大数据五期 21:29:02
+插入一个列族 
+
+qingyi 21:35:42
+多个过滤条件怎么写 
+编程实现
+
+雷宏扬 21:40:30
+删除这个操作会被当做数据的一个版本么？ 
+
+邪念 21:40:31
+所以shell命令不常用？
+大多数情况是用编程；
+但是有的时候，开发的时候，做一些快速的测试之类的，还是命令比较高效
+
+http://archive.cloudera.com/cdh5/cdh/5/
+搜索hbase
+
+简单的总结：
+hbase的表的模型(理解)
+	rowkey
+	family
+	qualifier 列
+	cell 单元格
+	版本 
+hbase架构基本认识(理解)
+	client
+	hmaster
+	hregionserver
+	zookeeper
+	表的region
+hbase命令
+	下去多敲
+		ddl
+		dml
+		help 'create'
+hbase编程
+	跟命令是对应：
+		建表 Admin  
+		插入 Put
+		查询 Get Scan
+		过滤器 做预习
+		
+Eric Song 22:09:35
+为什么链接zooKeeper 而不是HMaster呢？ 
+说：hbase在使用的过程中，会存储一下元数据到zk
+	所以需要指定configuration.set("hbase.zookeeper.quorum", "node01:2181,node02:2181,node03:2181");
+	比如：通过元数据找到操作的表myuser表的数据存储在哪个hregionserver上
+	
+哲程是大腿😘 22:09:42
+老师，通过python操作thriftserver2来操作HBase，性能和这样直接连接有差距么？ 会有一些
+当然根据具体情况，进行性能测试
+
+赫赫哈嘿 22:13:21
+HUE 是 Hive 的客户端，不是 HBase 的吧？
+hue整合hadoop生态圈中的多个框架；hive hbase 。。。
+在浏览器界面做操作
+hue课堂不会将，但是会给扩展视频
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+

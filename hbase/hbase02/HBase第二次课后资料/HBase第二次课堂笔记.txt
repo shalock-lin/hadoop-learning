@@ -1,0 +1,319 @@
+声音和画面都ok吗？
+好，我这是ok的
+
+api编程
+hbase第二次课的课件有没有预习？
+
+哎呀 19:53:49
+各位领导好，北京市1000多个定点药店开始投放口罩了，可以限量购买，1个人凭身份证只能买5个。 定点药店查询 
+http://ybj.beijing.gov.cn/cxfw/jgmlcx/yljg/201812/t20181206_9299.html 
+
+
+
+n95
+生物级别的：医用的 gb18083
+防尘级别的：kn95  bg2626-2006
+
+哎呀 19:57:48
+老师，大数据要学到什么程度，才能进bat这样的大公司？
+1、就是各框架的基本使用（肯定过关）
+2、各框架的原理性的知识（面试时卡人、必问的）
+3、基本功：编程基本功 java jvm 各种算法 数据结构 linux
+
+哲程是大腿😘 19:58:02
+HBase和ES相对于的应用场景区别？
+
+----------
+上节课回顾：
+表模型
+	rowkey（按照字典序排序）、列族、列、单元格cell、多版本
+bhase集群架构
+	client
+	hmaster
+	hregionserver
+	表是以region为单位进行存储
+hbase shell
+	建表、插入数据put、查询数据get、scan
+	过滤器
+编程：
+	maven工程
+		test中，做了个测试：建表
+
+windows的hosts文件（C:\Windows\System32\drivers\etc），跟linux的/etc/hosts保持一致
+192.168.51.100 node01.kaikeba.com node01
+192.168.51.110 node02.kaikeba.com node02
+192.168.51.120 node03.kaikeba.com node03
+
+hbase中数据的查询，添加查询条件是通过过滤器的方式完成
+
+ValueFilter
+	zhangsan ==  cell的值
+	比较运算符
+	比较器
+	比较过滤器：RowFilter、FamilyFilter、QualifierFilter、ValueFilter
+
+胖虎ヾ 20:13:47
+二进制数据插入、怎么查看显示，scan ''   name怎么显示中文
+命令行的话，他会把结果转换成十六进制
+
+梁江涛 20:23:08
+应该是有默认的编码转成中文 
+
+小明同学 20:40:26
+可以在代码中直接执行 hbase 的命令吗，像mybatis 一样 
+没必要；没有
+
+蒋子杰 20:41:45
+能设置多个过滤器吗 
+可以；下边有例子
+命令行的话，也是可以的
+问：命令行中加多个过滤器？
+答：hbase> scan 't1', {ROWPREFIXFILTER => 'row2', FILTER => "
+(QualifierFilter (>=, 'binary:xyz')) AND (TimestampsFilter ( 123, 456))"}
+是help ‘scan’中的例子
+
+
+胖虎ヾ 20:42:29
+布隆过滤器能讲下吗
+看时间；如果时间不够，给录一个小视频
+
+王铁军上海 21:01:16
+计算页码的那个公式是怎么回事
+
+
+-------------------------
+hbase存储模型：
+集群中有一个或两个HMaster
+若干hregionserver
+每个hregionserver
+    HLog
+    BlockCache
+    许多region(每个region只保存一个表的数据)
+       每个region所属的表有n个列族，那么region中就有n个store
+          每个store中：一个memstore、多个溢出StoreFile文件（以HFile的格式，存储在HDFS）
+
+
+林崇辉 21:20:50
+是不是StoreFile合并的时候写到HDFS？
+不是
+flush生成storefile时，就已经在hdfs了 
+
+雷宏扬 21:20:53
+如果断电，memstore中还没来得及写入storefile的数据怎么保证不丢的
+hlog
+
+赫赫哈嘿 21:21:29
+HFile里的数据是按什么规则存在里面的
+按照KeyValue的排序后的结果进行存储
+
+云哥 21:21:57
+memstore数据flush时，会做整理吗
+不急
+
+建表的流程
+
+王铁军上海 21:24:34
+没个store下面都有一个size 默认是128M的memstore， 假如有很多个client同时写入，内存会不会不够用。
+不会
+
+李祝荣 21:32:07
+zk上的meta表创建时myuser主动创建和写入的吗？这个表怎么出来的
+[zk: node01:2181,node02:2181(CONNECTED) 2] ls /hbase
+[replication, meta-region-server, rs, splitWAL, backup-masters, table-lock, flush-table-proc, region-in-transition, online-snapshot, master, running, recovering-regions, draining, namespace, hbaseid, table] 
+meta-region-server 保存了meta表的位置信息
+
+胖虎ヾ 21:32:16
+mata也有个region保存么
+meta是表；
+表是以什么为单位进行存储，region
+
+赫赫哈嘿 21:33:29
+套路跟HDFS差不多 
+
+歸壹 21:36:14
+有没有可能region写入成功，写入meta失败怎么办 
+如果有，也会回滚
+
+赫赫哈嘿 21:37:12
+有write ahead log 
+
+云哥 21:37:35
+创建表时master先保持表的元数据，然后client和zk交付，拿到元数据，再写入数据吗？
+建表-》与zk交互，找到hbase:meta表-》将建表产生的元数据写入hbase:meta
+
+林崇辉 21:55:48
+为什么表的元信息要放在HRegionServer上，而不是直接放在Zookeeper上呢？
+hbae表 的数据能达到好几十G
+zk是简版文件系统，主要存储其他分布式框架的元数据信息，或者是一个陪着行的znode节点
+
+欢乐马 21:57:33
+一个store多大？ 
+就看下边的hfile的大小决定
+
+Eric Song 22:00:26
+在Region迁移的会后，是不是就不能更新数据了？ 
+肯定可以
+跟新 -》 hbase把它看成是写数据
+
+赫赫哈嘿 22:00:50
+region分裂的时候，是不是不能对外服务？ 
+是的；
+region分裂时，下线，不对外提供服务
+为了避免由于分裂造成停止服务的现象，可以通过预分区缓解
+
+The landlord's cat 22:02:21
+hdfs文件和region不在一个节点啊？ 
+datanode、regionserver可能在同一个节点
+
+
+云哥 22:03:11
+split时，子region的数据是拷贝父region？ 
+不是；就是将父数据一分为2
+父region: startrowkey, endrowkey
+求中间值 midrowkey
+startrowkey - midrowkey -> region1
+midrowkey - endrowkey -> region2
+
+墨已成土-李杰 22:03:40
+region切分主要是通过更改meta表数据实现的吗? 
+达到了region切分的条件，才切分；会更新元数据信息region1、region2到hbase:meta
+不是，后边讲
+
+歸壹 22:04:50
+5/6步是在一次请求完成的吗 
+先后完成；两步
+
+赫赫哈嘿 22:06:23
+region切分后是不是还得更新元信息 
+对
+
+杨晓宇 22:07:36
+hfile怎么做的高效随机存取？
+设计到hbase的底层数据结构、算法
+跳跃表、LSM（log sturcture tree）、布隆过滤器
+写数据：put myuer, rk001, info:age, 18
+会将它抽象成一个Cell(KeyValue) key: myuer+rk001+info+age+timestamp  value:18
+memstore中flush时，会进行排序，按照key进行排序 ，用到了跳跃 -> LSM
+最终hfile也是有序
+如果说要读取数据的时候，Memtore、blockcache、hfile
+myuser下有region的store1后很多hfile
+	首先过滤一下hfile是否包含要读取的数据：过滤器、时间范围（hfile都有时间范围的信息）、布隆过滤器
+	get mysuer, rk001, 时间范围
+	把包含查询的数据的hfile都保留下来了（很多的keyvalue）
+		
+如果从hfile中读取：
+	4部分组成
+		scanned block部分 -> 
+			data block(hbase 64kb keyvalue 'rk001')
+			index block -> keyvalue 先查找索引树：root index -> 中间索引 -> 3层Leaf index => 定位到datablock(block offset、大小)
+			bloom block
+		non scanned block
+		load on open
+		trailer
+
+
+林同学 22:07:50
+这个图哭了 好复杂 
+
+云哥 22:08:01
+比hdfs复杂 
+
+==========
+Eric Song 22:08:24
+在不断的读取过程中，memstore中不够怎么处理？ 
+memstore主要是写数据时，先写到memstore，达到128m后，flush生成hfile
+
+赫赫哈嘿 22:08:33
+hdfs更复杂吧 
+
+蛤蟆仔 22:09:11
+hregionserver不是可以有多个reglon？迁移是为了什么啊？
+负载均衡 
+
+云哥 22:09:24
+迁移为了负载均衡 
+
+蛤蟆仔 22:09:29
+哦哦哦 
+
+蛤蟆仔 22:09:40
+了解，谢谢 
+
+哎呀 22:09:45
+blockcache如何清理不活跃数据的呢？ 
+blockcache有三种实现方式，比如最老的实现方式：LRUBlockCache，LRU指latest recent used，将最近常用的缓存，不常用的会从缓存剔除
+
+云哥 22:10:06
+blockcache有lru淘汰机制 
+
+哎呀 22:10:18
+哦哦 
+
+云哥 22:11:01
+split时，子region的数据是拷贝父region？父region何时会删掉 
+会下线；其实他的数据分别被region1、region2使用了
+
+林志华 22:11:15
+HBase2.0后，blockcache改为off-heap了 
+对
+
+林志华 22:11:34
+小合并完的hfile文件会参与大合并吗？
+	肯定会；因为大合并是将一个store下的所有的hfile合并成一个
+小合并完的hfile文件会继续参与下一次的小合并吗？
+	有可能；看出发小合并的那几个属性值，如果满足条件，就会
+		hbase.hstore.compaction.min.size
+		hbase.hstore.compaction.max.size
+如果meta表大到region切分的条件，那么进行数据查询的话，性能是不是就下降了一大半了？meta表也需要进行预分区设计？ 
+	meta表只有一个region，不会切分，特殊的表
+
+四九 22:34:43
+两次hash值不一样吗 
+赫赫哈嘿 22:35:07
+可能不一样，因为用的是不同的hash函数 
+四九 22:35:36
+两个hash算法是不一样的算法对吧   ===》》》对的，正解
+赫赫哈嘿 22:35:42
+是的 
+
+四九 22:36:41
+布隆最大命中率最大是多少啊？还是根据内存大小有关？ 
+赫赫哈嘿 22:37:27
+跟布隆过滤器的位数和hash函数的个数有关 
+还有hash函数的算法 
+
+四九 22:38:41
+也就是说你用多的不同的hash去计算，就约接近实际值，你存的位数越多匹配值也就相对最准确是吧 
+
+哲程是大腿😘 22:39:04
+这个东西的意义是什么？ 
+四九 22:39:26
+查询的时候提前知道这个值有没有，没有就不去查询了 
+正解
+
+赫赫哈嘿 22:40:15
+过滤垃圾邮件：根据垃圾邮件的布隆过滤器判断一封邮件是不是垃圾邮件 
+
+Mao 22:40:16
+就是过滤一些肯定没有的 
+是的
+
+蛤蟆仔 22:40:25
+减少磁盘 IO 或者网络请求，因为一旦一个值必定不存在的话，我们可以不用进行的查询请求。
+对的 
+===================
+region flush时，会将里边的所有的store都进行flush
+企业中，列族的个数不会太多，1个或2个
+
+test,,1581519576813.40917f10b4ee71a9d423926bb9d03736.
+test,1000,1581519576813.3c5a848dc7c40cfb7406ebed3db09d4b.
+merge_region '40917f10b4ee71a9d423926bb9d03736','3c5a848dc7c40cfb7406ebed3db09d4b'
+
+
+
+
+
+
+
+
+

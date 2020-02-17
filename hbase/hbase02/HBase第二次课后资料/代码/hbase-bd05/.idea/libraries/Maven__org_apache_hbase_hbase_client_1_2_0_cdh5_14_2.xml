@@ -1,0 +1,45 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.hbase:hbase-client:1.2.0-cdh5.14.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/hbase/hbase-client/1.2.0-cdh5.14.2/hbase-client-1.2.0-cdh5.14.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/hbase/hbase-client/1.2.0-cdh5.14.2/hbase-client-1.2.0-cdh5.14.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/hbase/hbase-client/1.2.0-cdh5.14.2/hbase-client-1.2.0-cdh5.14.2-sources.jar!/" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/dev-support/jenkins-tools/buildstats/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-annotations/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-annotations/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-client/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-client/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-common/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-common/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-examples/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-examples/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-external-blockcache/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-hadoop-compat/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-hadoop-compat/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-hadoop2-compat/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-hadoop2-compat/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-it/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-prefix-tree/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-prefix-tree/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-procedure/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-procedure/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-protocol/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-rest/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-rest/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-rsgroup/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-rsgroup/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-server/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-server/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-shell/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-shell/src/test/rsgroup" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-spark/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-spark/src/test/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-thrift/src/main/java" />
+      <root url="file://C:/04sourcecode/hbase-1.2.0-cdh5.14.2/hbase-thrift/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="hbase_weibo" />
+        <module name="coprocessor" />
+        <module name="hbase_day03" />
+        <module name="hbasemr" />
+        <module name="hbase_day01" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="coprocessor" target="1.8" />
+      <module name="hbase-bd05" target="1.5" />
+      <module name="hbase_day01" target="1.8" />
+      <module name="hbase_day03" target="1.8" />
+      <module name="hbase_weibo" target="1.8" />
+      <module name="hbasemr" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

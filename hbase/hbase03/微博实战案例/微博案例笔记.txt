@@ -1,0 +1,55 @@
+Group name: namespace
+  Commands: alter_namespace, create_namespace, describe_namespace, drop_namespace, list_namespace, list_namespace_tables
+  
+  
+表名
+rowkey设计
+列族
+列
+cell的版本
+
+表名:微博内容 weibo:content
+rowkey设计 
+	每个用户需要发送微博，在rowkey中增加uid成分，可以作为前缀
+	一个人发送的多条微博如何区分？ -》 在uid的基础上，增加时间戳
+	uid_timestamp
+列族
+	一个
+	info
+列
+	titel\content\pic
+cell的版本
+	1
+
+表名
+rowkey设计
+	每个人他关注了谁，有哪些粉丝，在表中用一行存储起来就ok了
+	所以rowkey uid
+列族
+	A 关注了B，C，D；有粉丝E，F
+	attends, fans
+列
+	put -> 列名 被关注人的uid
+cell值
+	被关注人的uid
+cell的版本
+	1
+
+表名 weibo:receive_content_email
+rowkey设计
+	uid
+列族
+	info
+列
+	当前用户所关注人的uid作为列名
+cell的版本
+	1000
+cell值
+	所关注人发送微博时的rowkey
+	
+zhangsan5
+zhangsan4
+zhangsan3
+zhangsan2
+zhangsan1
+zhangsan0

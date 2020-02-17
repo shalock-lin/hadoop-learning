@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8041625b-920a-4ffb-aed5-54f970d5c782" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="HierarchyBrowserManager">
+    <option name="SORT_ALPHABETICALLY" value="true" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1XbmsK7CrFZcLSJo2AV0h3Hb9GB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="C:/04sourcecode/hbase-1.2.0-cdh5.14.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\Desktop\hbase-bd05\coprocessor\src\test\java" />
+    </key>
+  </component>
+  <component name="RunManager" selected="TestNG.HBaseOperate.filterList">
+    <configuration name="HBaseOperate.contains8" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="hbase_day01" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kaikeba.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.kaikeba.hbase" />
+      <option name="MAIN_CLASS_NAME" value="com.kaikeba.hbase.HBaseOperate" />
+      <option name="METHOD_NAME" value="contains8" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HBaseOperate.filterList" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="hbase_day01" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kaikeba.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.kaikeba.hbase" />
+      <option name="MAIN_CLASS_NAME" value="com.kaikeba.hbase.HBaseOperate" />
+      <option name="METHOD_NAME" value="filterList" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HBaseOperate.pageFilter" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="hbase_day01" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kaikeba.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.kaikeba.hbase" />
+      <option name="MAIN_CLASS_NAME" value="com.kaikeba.hbase.HBaseOperate" />
+      <option name="METHOD_NAME" value="pageFilter" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HBaseOperate.prefixFilter" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="hbase_day01" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kaikeba.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.kaikeba.hbase" />
+      <option name="MAIN_CLASS_NAME" value="com.kaikeba.hbase.HBaseOperate" />
+      <option name="METHOD_NAME" value="prefixFilter" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HBaseOperate.singleColumnValueFilter" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="hbase_day01" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kaikeba.hbase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.kaikeba.hbase" />
+      <option name="MAIN_CLASS_NAME" value="com.kaikeba.hbase.HBaseOperate" />
+      <option name="METHOD_NAME" value="singleColumnValueFilter" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="TestNG.HBaseOperate.filterList" />
+        <item itemvalue="TestNG.HBaseOperate.pageFilter" />
+        <item itemvalue="TestNG.HBaseOperate.prefixFilter" />
+        <item itemvalue="TestNG.HBaseOperate.singleColumnValueFilter" />
+        <item itemvalue="TestNG.HBaseOperate.contains8" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8041625b-920a-4ffb-aed5-54f970d5c782" name="Default Changelist" comment="" />
+      <created>1581323373392</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581323373392</updated>
+      <workItem from="1581323377583" duration="3179000" />
+      <workItem from="1581342170665" duration="5262000" />
+      <workItem from="1581397158142" duration="15111000" />
+      <workItem from="1581509283903" duration="3794000" />
+      <workItem from="1581521020451" duration="56000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="496" y="253" width="544" height="325" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1581345134442">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="496" y="253" width="544" height="325" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" timestamp="1581345134442" />
+    <state x="457" y="66" key="DetectedRootsChooserDialog" timestamp="1581342703829">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="457" y="66" key="DetectedRootsChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1581342703829" />
+    <state x="482" y="95" key="FileChooserDialogImpl" timestamp="1581342702783">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="482" y="95" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1581342702783" />
+    <state width="1483" height="477" key="GridCell.Tab.0.bottom" timestamp="1581521075485">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="477" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1581521075485" />
+    <state width="1483" height="477" key="GridCell.Tab.0.center" timestamp="1581521075485">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="477" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1581521075485" />
+    <state width="1483" height="477" key="GridCell.Tab.0.left" timestamp="1581521075485">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="477" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1581521075485" />
+    <state width="1483" height="477" key="GridCell.Tab.0.right" timestamp="1581521075485">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="477" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1581521075485" />
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog" timestamp="1581521020381">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1581397162028" />
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1581521020381" />
+    <state x="1920" y="0" width="1129" height="803" key="dock-window-1" timestamp="1581326456317">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1920" y="0" width="1129" height="803" key="dock-window-1/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1581326456317" />
+    <state x="0" y="50" key="new project wizard" timestamp="1581405547066">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="50" key="new project wizard/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1581405547066" />
+    <state x="0" y="50" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1581345585032" />
+    <state x="347" y="0" width="840" height="822" key="search.everywhere.popup" timestamp="1581510834789">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="347" y="0" width="840" height="822" key="search.everywhere.popup/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1581416060565" />
+    <state x="347" y="0" width="840" height="822" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1581510834789" />
+  </component>
+</project>
