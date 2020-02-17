@@ -1,0 +1,244 @@
+我这声音、画面是ok的
+
+hive是一个数据仓库的工具
+数据仓库
+dw:data warehouse
+用于数据分析，对企业的决策提供辅助支持
+数据仓库：本身不产生数据，也不消耗数据，提供给外部使用
+粮仓：用于存储粮食，不生产粮食，也不消耗粮食
+
+
+特点：
+面向主题：数仓构建时，主要看我们所有分析的业务，将相关业务（主题）的数据汇聚到数仓里
+集成性：将所有数据源中与主题相关的数据，汇聚
+非易失性；数据一旦进入数仓后，基本不会做修改
+时变性：数仓中数据分析的手段（工具）会变
+
+数仓中的数据：过去的数据？未来的数据？
+过去的
+
+数仓与数据库的区别：
+数据库：mysql、oracle，主要用于业务系统中，能够保证事务性；主要用于OLTP 联机事务处理
+数仓：主要是面向某一主题的数据做分析；主要用于OLAP 联机分析处理
+
+数仓并不是一个大型的数据库，数仓也不是要取代数据库
+
+数仓的分层架构：
+1、贴源层 ODS 用于保管原始数据
+2、数据仓库层 DW 主要用于数据分析，大部分的工作都在这一层；主要写hql（hive quere language）
+3、数据展示层 app 将上边分析的结构在此层展示
+
+
+哎呀 20:49:54
+时变性是指数仓中的数据记录只在某个时间点是准确的，而不是从分析工具方向
+可以这样理解
+
+王善霖 20:50:13
+有他了还要数据库吗
+要
+
+hive
+hive是数仓工具
+hive是数仓吗？
+
+hive数仓工具，基于hadoop的一个数仓工具；能够将结构化的数据映射成一张表
+
+表有哪些字段、字段的类型、字段间的分隔符、表数据的位置。。。
+这些信息是什么信息？
+元数据信息
+
+田宁-05期 21:01:33
+像这种结构化数据一般存储在数据库中，比如订单数据。如果真要用hive仓库，要把库中的数据拿出来再放到hdfs里吗？然后这样的好处在哪？ 
+数仓工具：一般数据量海量；大数据实现的一个数仓中做分析
+
+赫赫哈嘿 21:01:59
+hive是怎样把sql转换成mr的呢？这个会讲吗？ 
+后边讲
+
+四九 21:03:48
+创建表是对应的以前的inputformat吗？写sql是对应以前的mr吗？ 
+不是
+
+林志华 21:05:12
+老师，ODS层的数据是怎么进入的？与DW层的数据是什么区别，是做数据清洗之类的操作之后的数据吗？
+ODS层采集过来
+比如DW层会对ODS层数据做一下清洗，过滤
+
+哲程是大腿😘 21:07:03
+数仓整体架构设计的时候怎么去梳理业务逻辑会讲么？还是通过实战案例了解？ 
+这个会根据具体的案例会讲：大的数仓案例
+
+impala框架 hive框架
+
+hive-site.xml
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+        <property>
+                <name>javax.jdo.option.ConnectionURL</name>
+                <value>jdbc:mysql://node03:3306/hive?createDatabaseIfNotExist=true&amp;characterEncoding=latin1&amp;useSSL=false</value>
+        </property>
+
+        <property>
+                <name>javax.jdo.option.ConnectionDriverName</name>
+                <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionUserName</name>
+                <value>root</value>
+        </property>
+        <property>
+                <name>javax.jdo.option.ConnectionPassword</name>
+                <value>123456</value>
+        </property>
+        <property>
+                <name>hive.cli.print.current.db</name>
+                <value>true</value>
+        </property>
+        <property>
+                <name>hive.cli.print.header</name>
+            <value>true</value>
+        </property>
+    	<property>
+                <name>hive.server2.thrift.bind.host</name>
+                <value>node03</value>
+        </property>
+</configuration>
+
+hive交互方式：
+cli 第一种一般不怎么用了
+	hive
+jdbc 企业中用的
+	nohup hive --service hiveserver2 2>1& &
+	[hadoop@node03 ~]$ beeline --color=true
+	
+hive命令 比如说数仓搭建好了，所有的语句有ok了，将语句写入hql文件里
+	 hive -e "show databases"
+	 hive f- "hive sql文件"
+
+
+desc database db_hive;
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+| db_name  | comment  |                      location                      | owner_name  | owner_type  | parameters  |
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+| db_hive  |          | hdfs://node01:8020/user/hive/warehouse/db_hive.db  | hadoop      | USER        |             |
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+| db_name  | comment  |                      location                      | owner_name  | owner_type  | parameters  |
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+| db_hive  |          | hdfs://node01:8020/user/hive/warehouse/db_hive.db  | hadoop      | USER        |             |
++----------+----------+----------------------------------------------------+-------------+-------------+-------------+--+
+
+drop database if exists db_hive cascade;
+
+http://hive.apache.org/
+
+课堂总结：
+回顾了hadoop、zookeeper；如果有疑问，参考对应的课件、视频复习
+
+hive
+数仓概念
+	数仓的分层架构：
+hive概念
+	基于hadoop的数仓工具
+	与数据库的对比
+	优缺点
+		hql 门槛低
+		延时高
+	hive架构：driver：四部分
+hive安装部署
+hive 数据库ddl
+
+赫赫哈嘿 22:05:34
+hive感觉开发人员不会用到太多，最多就写个UDF、UDAF或UDTF，更多是数据库管理人员或数据分析人员用的吧？ 
+看工作岗位，如果与数仓有关，写的比较多；
+而且，在工作中的一些需求，可以用mr、spark编程、flink、hql、impala实现，
+考虑开发效率：写sql更快，更高效门槛低
+
+
+✨卡米✨ 22:05:37
+1.想知道hive需要mysql用户具备哪些权限?因为一般企业不会提供mysql的root用户  2.hive是否一定要装在hadoop集群的某个结点上?是否可以使用单独一台服务器来运行hive 
+hive用户：操作的时候，肯定是一个对hdfs有操作权限的用户；
+mysq用户 两个概念
+
+hive使用时，元数据存储到mysql时，所用到的mysql用户，可以创建一个普通用户
+用root登陆mysql，增加一个普通用户，比如xiaoming，密码：123456
+
+hive安装部署：
+hive-site.xml
+<property>
+		<name>javax.jdo.option.ConnectionUserName</name>
+		<value>xiaoming</value>
+</property>
+<property>
+		<name>javax.jdo.option.ConnectionPassword</name>
+		<value>123456</value>
+</property>
+
+Mr.Jiang 22:09:59
+大数据到底有哪些岗位可做？哪些岗位比较难？ 
+岗位：数仓岗位；ETL；做spark开发；flink开发；大数据&机器学习
+比较难
+	大数据&机器学习
+	架构师
+
+✨卡米✨ 22:10:05
+老师,我想表达的是mysql用户需要配置哪些权限,比如表的增删改查等等 
+grant all privileges  on  hive.* to 'xiaoming'@'%' identified by '123456' with grant option;
+flush privileges;
+
+赫赫哈嘿 22:10:11
+之前，我在公司看到有人写了一句40行长的hql，各种子查询嵌套，然后出问题，一堆人都去维护，愣是没读懂 
+
+xxzx_7196030 22:10:41
+大数据整体比web工资高不
+肯定的 
+
+
+============
+
+王铁军上海 22:11:19
+hive 元数据也可以保存在其它数据库上吧，只是我们选择了使用mysql
+对
+
+蛤蟆仔 22:11:57
+之前做olap查询系统的时候，自动拼接sql限制了。超过了就查询不了。不是太有经验 
+
+赫赫哈嘿 22:12:32
+机器学习的工作，我们应该做不了吧 
+得学习机器学习相关的内容，课程最后边有机器学习的内容
+
+哲程是大腿😘 22:13:40
+只要你努力都可以的，现在研究生水平也不高啊 
+
+赫赫哈嘿 22:14:04
+机器学习很多岗位要求就是985的研究生 
+
+王铁军上海 22:14:53
+我们公司sql 经常超过500行
+
+未来已来 22:15:05
+我写过 1千多行
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

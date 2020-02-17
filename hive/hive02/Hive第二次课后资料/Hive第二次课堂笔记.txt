@@ -1,0 +1,443 @@
+我这的网络是ok的
+
+上课用的截图工具：
+画图：faststone capture
+快捷截图工具：Snipaste
+画图工具：drawio (画了hdfs写数据流程)，有在线版：https://draw.io/
+
+今天晚上的课件内容有没有预习？
+
+蒋子杰 19:51:06
+一般hive操作的数据会保存起来吗
+看你的需求；如果分析的结果，会作为其他语句的分析内容的话，可以考虑将中间结果保存起来
+
+annuoa 19:52:04
+问题： 1、nohup hive --service hiveserver2 2>&1 &    这个命令能解释一下吗？同时 2>&1 是什么？ 2、启动hiveserver2后服务需要关闭吗？是用kill %id 命令关闭吗？ 3、hive的符合类型使用说明和实战 中的参数说明，能给个[LINES TERMINATED BY char]的例子吗？ 
+1、2>&1 标准错误重定向到标准输出 
+2、hiveserver2如果要关闭的话，需要通过kill -9的方式杀掉
+3、LINES TERMINATED BY char 行与行间的分隔符
+create table t_array(
+id string,
+name string,
+locations array<string>
+) row format delimited fields terminated by ' ' collection items terminated by ','
+LINES TERMINATED BY '\n';
+
+
+hive sql如何编译?
+https://tech.meituan.com/2014/02/12/hive-sql-to-mapreduce.html
+
+annuoa 19:58:05
+DBeaver 中执行insert 语句出错SQL 错误 [1] [08S01]: Error while processing statement: FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask   其他操作没有问题 
+下去首先确定一下，连接是否是ok的？
+如果连接没问题
+在beeline的方式，测试一下
+
+哎呀 19:58:54
+beeline如何显示正在使用的是哪个数据库？ 
+use databasename;
+
+=============
+回顾：
+数仓
+	数仓的分层设计：3层
+		ods
+		dw
+		app
+hive
+	是基于hadoop的数仓工具；
+	能够将结构化的数据，映射成hive表
+使用hive过程，元数据是保存在mysql或oracle
+	hive-site.xml中配置
+hive的交互方式
+	第一：hive
+	第二：hiveserver2服务
+		客户端beeline连接服务
+	第三：hive命令
+		hive -e hql语句
+		hive -f hql文件
+hive 库的DDL操作
+
+hive表的ddl操作
+CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name 
+[(col_name data_type [COMMENT col_comment], ...)] 
+[COMMENT table_comment] 
+[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] 分区
+[CLUSTERED BY (col_name, col_name, ...) 分桶
+[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] 
+[ROW FORMAT row_format]  row format delimited fields terminated by “分隔符”
+[STORED AS file_format] 
+[LOCATION hdfs_path]
+
+EXTERNAL：外部表；与它对应的有内部表
+	如果创建内部表，不需要external关键字
+IF NOT EXISTS
+PARTITIONED BY 如果常见分区表，需要此关键字
+CLUSTERED BY 。。。SORTED BY。。。分桶表
+row format delimited fields terminated by “分隔符” 记录中字段间的分隔符；hive中默认的分隔符是'\001'，非打印字符
+STORED AS file_format 用来指定我们表的存储格式
+	textfile 默认
+	sequencefile
+	orc
+LOCATION 用于指定表的数据存储的路径
+
+建表
+内部表
+	第一：
+	向表中插入数据，可以用insert into xx values();但是不建议这样
+	因为会运行一次mr job，所以会生成一个小文件；
+	第二：
+	通过查询其他表的同时，创建新表，并将查询的结果插入到新表中
+	create table xxtable as select xxx
+	ctas
+	create table if not exists myhive.stu1 as select id, name from stu;
+	第三：
+	通过like，复制其他表结构的方式，建表
+	create table if not exists myhive.stu2 like stu;
+	
+	desc formatted stu;
+	+-------------------------------+----------------------------------------------------+-----------------------+--+
+|           col_name            |                     data_type                      |        comment        |
++-------------------------------+----------------------------------------------------+-----------------------+--+
+| # col_name                    | data_type                                          | comment               |
+|                               | NULL                                               | NULL                  |
+| id                            | int                                                |                       |
+| name                          | string                                             |                       |
+|                               | NULL                                               | NULL                  |
+| # Detailed Table Information  | NULL                                               | NULL                  |
+| Database:                     | myhive                                             | NULL                  |
+| Owner:                        | hadoop                                             | NULL                  |
+| CreateTime:                   | Wed Feb 05 20:18:57 CST 2020                       | NULL                  |
+| LastAccessTime:               | UNKNOWN                                            | NULL                  |
+| Protect Mode:                 | None                                               | NULL                  |
+| Retention:                    | 0                                                  | NULL                  |
+| Location:                     | hdfs://node01:8020/user/hive/warehouse/myhive.db/stu | NULL                  |
+| Table Type:                   | MANAGED_TABLE                                      | NULL                  |
+| Table Parameters:             | NULL                                               | NULL                  |
+|                               | COLUMN_STATS_ACCURATE                              | true                  |
+|                               | numFiles                                           | 1                     |
+|                               | numRows                                            | 1                     |
+|                               | rawDataSize                                        | 10                    |
+|                               | totalSize                                          | 11                    |
+|                               | transient_lastDdlTime                              | 1580905200            |
+|                               | NULL                                               | NULL                  |
+| # Storage Information         | NULL                                               | NULL                  |
+| SerDe Library:                | org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe | NULL                  |
+| InputFormat:                  | org.apache.hadoop.mapred.TextInputFormat           | NULL                  |
+| OutputFormat:                 | org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat | NULL                  |
+| Compressed:                   | No                                                 | NULL                  |
+| Num Buckets:                  | -1                                                 | NULL                  |
+| Bucket Columns:               | []                                                 | NULL                  |
+| Sort Columns:                 | []                                                 | NULL                  |
+| Storage Desc Params:          | NULL                                               | NULL                  |
+|                               | serialization.format                               | 1                     |
++-------------------------------+----------------------------------------------------+-----------------------+--+
+内部表有另外一个称呼：管理表 Table Type:                   | MANAGED_TABLE   
+想查看表到底是内部表还是外部表？
+ 
+
+表中有数据
+select * from stu1;
+
+create table if not exists myhive.stu3(id int, name string)
+row format delimited fields terminated by '\t' 
+stored as textfile 
+location '/user/stu3';
+
+albert 20:28:21
+为啥内部表叫管理表？ 
+就是这样设计的
+
+xxzx_7196030 20:07:36
+保存在hdfs上的表数据与保存在mysql中的元数据的区别是什么 
+一定分清楚：hive表的数据（hdfs）、hive表的元数据（hive-site.xml配置的数据库里，比如mysql的hive数据库）
+两个概念
+
+行哲 20:30:57
+如果导入数据时的数据分隔符有多种怎么处理？
+如果出现这种情况，只能先对表数据做清洗，把分隔符变成同一个才行
+
+余沛彬 20:31:21
+不指定存储路径，表存在那 
+默认情况表数据存储在哪？
+如果没有指定location，默认在此路径
+/user/hive/warehouse/数据库.db/表/
+/user/hive/warehouse/myhive.db/stu
+
+	
+外部表
+多一个external关键字
+create external table myhive.teacher (t_id string, t_name string) 
+row format delimited fields terminated by '\t';
+为什么使用外部表？
+企业中，有时候数据并不是只有你自己或你自己的团队在用，可能其他的团队也会使用；
+order.log文件，a、b都在用，
+分别创建了aOrder、bOrder表
+如果aOrder表被删除，会同时将order.log文件从hdfs删除
+为了防止这种现象，可以考虑建外部表
+
+一般情况下，在企业中，数仓中
+ods层属于贴源层：建的表一般使用“外部表”
+而dw层，表是属于自己的，可以使用“内部表”
+
+内部表的删除，会删除那些数据，大家自己验证
+
+加载数据
+本地加载
+load data local inpath '/kkb/install/hivedatas/teacher.csv' into table myhive.teacher;
+类似于拷贝
+从hdfs加载
+load data inpath '/kkb/hdfsload/hivedatas' overwrite into table myhive.teacher;
+这种方式，会将/kkb/hdfsload/hivedatas数据，剪切到表目录下
+
+0: jdbc:hive2://node03:10000> load data inpath '/kkb/hdfsload/hivedatas' into table myhive.teacher;
+Error: Error while compiling statement: FAILED: SemanticException Line 1:17 Invalid path ''/kkb/hdfsload/hivedatas'': No files matching path hdfs://node01:8020/kkb/hdfsload/hivedatas (state=42000,code=40000)
+
+
+
+
+分区表
+创建一个级别的分区表
+create table score(s_id string, c_id string, s_score int) partitioned by (month string) 
+row format delimited fields terminated by '\t';
+
+create table score2 (s_id string,c_id string, s_score int) partitioned by (year string, month string, day string) row format delimited fields terminated by '\t';
+
+加载数据
+load data local inpath '/kkb/install/hivedatas/score.csv' into table score partition (month='201806');
+/user/hive/warehouse/myhive.db/score/month=201806
+
+/user/hive/warehouse/myhive.db/score2/year=2018/month=06/day=01
+/user/hive/warehouse/myhive.db/score2/year=2018/month=06/day=02
+/user/hive/warehouse/myhive.db/score2/year=2018/month=07/day=01
+是一个分区，还是三个分区？
+
+- 现在有一个文件score.csv文件，里面有三个字段，分别是s_id string, c_id string, s_score int
+- 字段都是使用 \t进行分割
+- 存放在集群的这个目录下/scoredatas/day=20180607，这个文件每天都会生成，存放到对应的日期文件夹下面去
+	确定是创建分区表
+- 文件别人也需要公用，不能移动
+	外部表
+-请创建hive对应的表，并将数据加载到表中，进行数据统计分析，且删除表之后，数据不能删除
+
+create external table score4(s_id string, c_id string, s_score int) 
+partitioned by (day string) 
+row format delimited fields terminated by '\t' 
+location '/scoredatas';
+
+ msck repair table score4;
+ 分区表需要的
+
+xxzx_7196030 21:12:35
+hdfs数据能映射多个元数据吗 
+没明白；
+xxzx_7196030 21:14:56
+就是mysql的不同表能对应同一个hdfs上的数据吗 
+不同的hive表可以共用一个hdfs的数据吗？
+应该是hive、元数据
+
+哲程是大腿😘 21:12:42
+如果我有一个历史日志分类后按照时间分区，分区后的数据比较小，达不到块的存储倍数。那我分不分区，这个适合分区的数据量有什么标准么？
+分区；
+如果有效文件，后边讲hive调优的时候，会将如何处理
+HiveCombineTextInputFormat
+
+四九 21:13:42
+老师我不明白这些数据，比如说日志，那是不是咱们要清洗一下，在导入吗 
+如果，数据（日志数据）跟表结构想匹配，那么直接加载就行
+如果不匹配，需要做数据的预处理，或清洗
+a	b	c	d
+表log，fields terminated by '\t'
+
+
+分桶表
+分区表是为了减少扫描的数据量，提高效率；
+分桶表也是类似的
+
+Hive表或分区表可进一步的分桶
+
+-- 创建分桶表
+create table myhive.user_buckets_demo(id int, name string)
+clustered by(id) 
+into 4 buckets 
+row format delimited fields terminated by '\t';
+
+-- 创建普通表
+create table user_demo(id int, name string)
+row format delimited fields terminated by '\t';
+
+抽样
+tablesample(bucket  x  out  of  y)
+对表做抽样，普通表可以；分桶表可以
+
+user_buckets_demo 4个桶
+0 1 2 3
+select * from user_buckets_demo tablesample(bucket 1 out of 2);
+-- 需要采样的总桶数=4/2=2个
+-- 先从第1个桶中取出数据
+-- 1+2=3，再从第3个桶中取出数据
+
+annuoa 21:33:15
+分桶表和分区表的区别？
+分区表的数据存储在表下的子文件夹
+分桶表：存储在子文件中
+
+寇大兴 21:33:33
+分桶的个数，怎么确定呢？ 
+如果数据量比较大，可以128m的倍数
+如果数据 不大，比如300m，考虑并行度
+4、6
+
+小明同学 21:33:36
+分桶和分区有点混啊 
+做采样或者join操作，可以考虑创建分桶表
+
+xxzx_4306938 21:37:03
+可以直接把一个表创建为即分区又分桶 
+
+
+===========
+
+加载表数据
+	create table -> location
+	load
+	ctas
+	
+use myhive;
+create table order_partition(
+order_number string,
+order_price  double,
+order_time string
+)
+partitioned BY(month string)
+row format delimited fields terminated by '\t';
+
+--创建普通表
+create table t_order(
+    order_number string,
+    order_price  double, 
+    order_time   string
+)row format delimited fields terminated by '\t';
+
+--创建目标分区表
+create table order_dynamic_partition(
+    order_number string,
+    order_price  double    
+)
+partitioned BY(order_time string)
+row format delimited fields terminated by '\t';
+
+insert into table order_dynamic_partition partition(order_time) 
+select order_number, order_price, order_time from t_order;
+
+hive中的join只支持等值连接
+
+select * from score s order by s_score desc ;
+hive sql -> mr -> 
+如果用order by 对表数据进行排序的话，mr只有一个reduce
+从而做到了全局排序
+
+select s_id, avg(s_score) avgscore 
+from score group by s_id order by avgscore desc; 
+
+set mapreduce.job.reduces=3;
+select * from score s sort by s.s_score;
+
+insert overwrite local directory '/kkb/install/hivedatas/distribute' 
+select * from score distribute by s_id sort by s_score;
+
+insert overwrite local directory '/kkb/install/hivedatas/distribute_sort' 
+select * from score distribute by s_score sort by s_score;
+
+
+insert overwrite local directory '/kkb/install/hivedatas/cluster' 
+select * from score  cluster by s_score;
+
+=======================
+总结：
+表的ddl
+建表语法
+	内部表
+	外部表
+		两个表的区别？
+		使用场景？
+			ods使用外部表
+			dw使用内部表
+			
+	分区表
+		建表语法partitioned by(month string)...
+分桶表
+	语法：....clustered by (id) into 8 buckets...
+	
+	分区、分桶
+		都是为了提高效率
+		区别：
+			分区：对应文件夹
+			分桶：对应一个文件夹下的多个分桶文件
+导入数据
+	load
+	ctas
+	create表，put数据到location位置
+导出数据
+	通过查询，将结果写入到本地或hdfs文件
+查询：
+	分组
+		group by ... having ..
+	排序：
+		order by全局
+		sort by 局部
+		distributed by ... sort by .... <=> cluster by的转换
+		
+哲程是大腿😘 22:17:44
+diustribute by + sort by 的业务场景是什么？能举个栗子么？ 
+最终编程mr
+mr中分区、每个分区中，自定义排序规则 -》 讲过
+
+Mr.Jiang 22:25:23
+老师，我想问一下，如果日增量数据量很大，比如上亿，这得怎么建表 
+没有区别
+考虑要不要建分区表、分桶表
+新数据产生了，将数据append到表中即可
+
+嘤鸣 22:25:33
+having是不是不能用别名试一下
+
+动态分区有什么应用场景呀？
+
+xxzx_4175202 22:29:40
+都是为了避免单个物理文件过大   分区分的是目录  分桶是分的文件？ 
+效率
+
+xxzx_4175202 22:34:32
+分的时候不是按照指定字段hash取模了 
+是的呀
+
+
+bruce 21:17:42
+===============
+
+梁江涛 21:17:49
+我直接删除一个外部表，删除后又重新建，发现数据还在 
+理应如此
+
+梁江涛 21:18:03
+这个不需要修复吗 
+创建了分区表，通过put的方式，将表数据放到location目录
+，这时，才需要修复
+
+PMKTEST 21:18:35
+hdfs ，hive表，元数据，hive元数据的关系是什么
+hive表的数据存储在hdfs上
+元数据：比如表有哪些字段、字段类型、字段间分割符，这些对表的表、库的描述性的信息，称为元数据
+hive表的元数据存储在mysql中
+
+
+
+
+
+	
+
+
+
+
+
