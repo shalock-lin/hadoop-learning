@@ -1,0 +1,23 @@
+<queue name="develop">
+		<minResources>512mb,4vcores</minResources>
+		<maxResources>20480mb,20vcores</maxResources>
+		<maxRunningApps>100</maxRunningApps>
+		<schedulingMode>fair</schedulingMode>
+		<weight>1</weight>
+		<aclSubmitApps>develop develop</aclSubmitApps>
+		<aclAdministerApps>develop develop</aclAdministerApps>
+</queue>
+
+20 * log2(Cluster Size)
+8台
+20 * log2(8) = 60
+
+（2）编辑日志存储路径dfs.namenode.edits.dir设置与镜像文件存储路径dfs.namenode.name.dir尽量分开，达到最低写入延迟
+（3）元数据信息fsimage多目录冗余存储配置
+为了安全，配置在不同的目录
+尽量使用固态盘
+
+reduce任务个数
+输入的数据量/256M
+2560M/256M = 10个reduce task
+
