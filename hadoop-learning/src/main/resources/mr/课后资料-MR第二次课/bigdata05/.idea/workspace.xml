@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="710b2d1e-2907-4e66-adf0-b8a1ba3e0739" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="bigdata05" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1W1PZ0ELBYaZK9krG0KN5YSti5D" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/mr_day04/src/main/java/com/kkb/demo07" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\Desktop\bigdata05\mr_day04\src\main\java\com\kkb\demo07" />
+      <recent name="C:\Users\admin\Desktop\bigdata05\mr_day04\src\main\java\com\kkb\demo06" />
+      <recent name="C:\Users\admin\Desktop\bigdata05\mr_day04\src\main\java\com\kkb\demo05" />
+      <recent name="C:\Users\admin\Desktop\bigdata05\mr_day04\src\main\java\com\kkb\demo04" />
+      <recent name="C:\Users\admin\Desktop\bigdata05\mr_day04\src\main\java\com\kkb\demo03" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.WordCount (2)">
+    <configuration name="FlowSortMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kkb.demo06.FlowSortMain" />
+      <module name="mr_day04" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kkb.demo06.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="KeyValueMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kkb.demo02.KeyValueMain" />
+      <module name="mr_day04" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kkb.demo02.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyInputFormatMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kkb.demo04.MyInputFormatMain" />
+      <module name="mr_day04" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kkb.demo04.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WordCount (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kkb.mr.demo01.wordcount.WordCount" />
+      <module name="mr_day03" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kkb.mr.demo01.wordcount.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WordCount (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kkb.demo07.WordCount" />
+      <module name="mr_day04" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kkb.demo07.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.KeyValueMain" />
+      <item itemvalue="Application.MyInputFormatMain" />
+      <item itemvalue="Application.WordCount (1)" />
+      <item itemvalue="Application.FlowSortMain" />
+      <item itemvalue="Application.WordCount (2)" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.WordCount (2)" />
+        <item itemvalue="Application.FlowSortMain" />
+        <item itemvalue="Application.WordCount (1)" />
+        <item itemvalue="Application.MyInputFormatMain" />
+        <item itemvalue="Application.KeyValueMain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="710b2d1e-2907-4e66-adf0-b8a1ba3e0739" name="Default Changelist" comment="" />
+      <created>1578314179664</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1578314179664</updated>
+      <workItem from="1578314183022" duration="5232000" />
+      <workItem from="1578486771345" duration="6001000" />
+      <workItem from="1578542021050" duration="4442000" />
+      <workItem from="1578550513358" duration="65000" />
+      <workItem from="1578623746238" duration="1708000" />
+      <workItem from="1578657218055" duration="9487000" />
+      <workItem from="1578720206589" duration="479000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="293" y="68" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578543414429">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="293" y="68" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578543414429" />
+    <state x="530" y="64" key="#com.intellij.ide.util.MemberChooser" timestamp="1578662535528">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="530" y="64" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578542625237" />
+    <state x="530" y="64" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1578662535528" />
+    <state x="435" y="156" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578543394392">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="435" y="156" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578543394392" />
+    <state x="457" y="66" key="DetectedRootsChooserDialog" timestamp="1578626491802">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="457" y="66" key="DetectedRootsChooserDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578626491802" />
+    <state x="499" y="113" key="FileChooserDialogImpl" timestamp="1578716850967">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="113" key="FileChooserDialogImpl/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578626490723" />
+    <state x="499" y="113" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1578716850967" />
+    <state width="1483" height="277" key="GridCell.Tab.0.bottom" timestamp="1578720685897">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="398" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578550577958" />
+    <state width="1483" height="277" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1578720685897" />
+    <state width="1483" height="277" key="GridCell.Tab.0.center" timestamp="1578720685886">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="398" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578550577958" />
+    <state width="1483" height="277" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1578720685886" />
+    <state width="1483" height="277" key="GridCell.Tab.0.left" timestamp="1578720685883">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="398" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578550577958" />
+    <state width="1483" height="277" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1578720685883" />
+    <state width="1483" height="277" key="GridCell.Tab.0.right" timestamp="1578720685893">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1483" height="398" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578550577958" />
+    <state width="1483" height="277" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1578720685893" />
+    <state x="142" y="0" key="SettingsEditor" timestamp="1578493139486">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="142" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1578493139486" />
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog" timestamp="1578550513349">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1578550513349" />
+    <state x="376" y="199" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1578314183031" />
+    <state x="0" y="50" key="new project wizard" timestamp="1578659769048">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="0" y="50" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1578659769048" />
+    <state x="347" y="-1" width="840" height="1034" key="search.everywhere.popup" timestamp="1578662201939">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="347" y="-1" width="840" height="1034" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1578662201939" />
+  </component>
+</project>

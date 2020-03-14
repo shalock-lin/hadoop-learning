@@ -1,0 +1,342 @@
+能听到声音吗 画面能看到吧
+
+大家的集群都装好了吗？
+咱们每次课呢，老师都会提前15分钟左右开始直播，如果对之前的课程有什么问题，可以提前来
+
+
+是学生？还是上班族？有没有搞IT的？
+	有已经开始做大数据的吗？
+	
+
+上课资料：课前资料 课后资料
+课件：
+
+每周一、三、五，晚上2个小时
+上课节奏快，要跟得上
+
+=========
+八点正式开始上课
+①把hadoop环境的安装，快速的过一下
+②对hdfs开个头
+
+1、hadoop的起源
+doug cutting =》 2年的业余时间，几十万行的代码
+lucene nutch =>
+做网络爬虫，从网上爬取海量的网页，存储起来，做一些索引
+第一问题：数据量太大，存储面临困难
+第二个问题：数据量太大，做索引，肯定要计算，面临挑战
+
+2003 google GFS 论文 ——》分布式文件系统的论文 NFS
+2004 MapReduce -> MapReduce 
+
+NFS + MapReduce => 所以就将俩者抽离了出来，=》 hadoop框架
+
+2、
+0.x =》 1.x =》 2.x =》3.x
+08年的时候，被贡献到apache
+
+目前使用的比较多的还是2.x 
+2.6 2.7 2.8
+
+=======================
+版本选择
+原生的版本：apache hadoop
+cloudera、mapR、hdp
+国内：星环
+
+中小企业：大部分用cloudera版本
+大型公司：有使用cloudera，也有使用apache hadoop
+
+版本兼容、bug修复
+
+==========================
+大数据框架，运行模式：
+hadoop
+1、本地模式 快速的感受 在一个jvm中运行的，一个进程
+2、伪分布式模式 hadoop分布式的框架，有很多的角色（进程）要运行，这些进程运行在一个机器上
+3、完全分布式模式 企业中肯定是这个
+1,2,3
+
+虚拟机：
+	内存
+	磁盘空间
+	尽量不要安装到c盘
+	
+linux的网络配置：
+1、vmware网络配置
+2、windows网络配置
+3、linux的网络配置
+
+网关、网段、子网掩码
+IPADDR=192.168.51.100
+NETMASK=255.255.255.0
+GATEWAY=192.168.51.1
+DNS1=8.8.8.8
+
+/etc/hosts
+192.168.51.100 node01.kaikeba.com node01
+192.168.51.110 node02.kaikeba.com node02
+192.168.51.120 node03.kaikeba.com node03
+
+node01.kaikeba.com
+fqdn 
+
+
+6、hadoop框架
+hdfs: hadoop distributed filesystem 
+	主从架构：
+	主：namenode 集群管理，存储元数据（内存） 
+	从：datanode 负责存储数据
+	secondarynamenode 辅助nn管理元数据，对元数据做冷备份
+
+yarn 资源调度框架
+	主：resourcemanager 负责整个集群的资源调度
+	从：nodemanager 主要负责用于计算任务的执行
+mapreduce
+
+计算机中哪些算是资源？CPU 内存 磁盘IO 网络IO
+
+元数据：有一个基本的认识 
+对数据的描述信息
+
+==========
+8、
+为什么编译源码？
+cdh、原生的apache版本，不支持c程序库以及各种压缩算法
+
+[hadoop@node01 ~]$ hadoop checknative
+20/01/03 21:04:05 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2 library system-native
+20/01/03 21:04:05 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
+Native library checking:
+hadoop:  true /kkb/install/hadoop-2.6.0-cdh5.14.2/lib/native/libhadoop.so.1.0.0 支持c程序库 用c程序访问hadoop，得有这一项
+zlib:    true /lib64/libz.so.1 压缩算法
+snappy:  true /lib64/libsnappy.so.1  压缩算法
+lz4:     true revision:10301 压缩算法
+bzip2:   true /lib64/libbz2.so.1 压缩算法
+openssl: true /lib64/libcrypto.so
+
+xxzx_7088706 20:57:13
+元数据描述信息里面详细都有什么 
+后边讲secondarynamenode时看一下
+
+xxzx_9968794 21:05:28
+安装了openssl，查看openssl还是false 
+
+freevision 21:06:06
+老师上课的笔记会发给我们吗？
+会发
+
+王铁军上海 21:06:30
+之前说的，为什么要关闭selinux ，和防火墙。实际中的情况又是怎样，老师没有解答
+肯定要关  集群都关了，会不会不安全；
+
+冬月飞火 21:06:31
+三台虚拟机搭好环境后，虚拟机是不是就不能关机了 
+肯定可以
+如果要关机：按照正确的顺序：1、先关闭hadoop集群 stop-all.sh 2、再关闭虚拟机3、再关闭笔记本
+shutdown -h now 
+
+汪志良 21:06:49
+不关闭selinux，也不会影响hadoop集群的安装吧？ 
+都要关
+
+
+李祝荣 21:07:06
+集群与主从有什么区别吗？刚刚讲的那么namenode和datanode是否就是一个集群? 
+hdfs 可以看成一个存储集群 namenode主  datanode从
+
+Freddy 21:09:14
+secondarynamenode的冷备份是啥操作？
+
+解压压缩包
+进入配置目录，修改配置文件
+配置环境变量
+文件夹分发到各节点
+
+JAVA_HOME找不到 error
+hadoop_env.sh JAVA_HOME配置的有问题
+/etc/profile 
+
+slaves 决定了集群中哪些节点作为从节点 
+hdfs：datanode
+yarn: nodemanager
+	node01
+	node02
+	node03
+	
+xxzx_8101353 21:15:46
+nn和resourcemanager必须要在一台服务器上吗？ 
+不一定
+企业中肯定不是一个节点
+
+运行start-dfs.sh start-yarn.sh的节点
+
+xxzx_2899691 21:21:44
+这个配置文件只配置第一台机器吗？还是所有及其都需要配置 
+主节点解压-修改配置文件 =》 想所有的从节点都拷贝一份这个文件夹
+
+格式化：
+只在初次搭建集群是，在主节点node01，执行一次
+hdfs数据全部丢失
+
+分布式框架启动的时候，如果一次启动集群多有的进程的话，都是在主节点运行脚本
+start-dfs.sh
+start-yarn.sh
+
+学习大数据，一定要学会看日志？
+
+windows的hosts文件做下ip 主机名的映射
+C:\Windows\System32\drivers\etc\hosts
+192.168.51.100 node01
+192.168.51.110 node02
+192.168.51.120 node03
+
+http://archive.cloudera.com/cdh5/cdh/5/
+
+xxzx_7088706 21:40:51
+为什么要在namenode上运行啊。。
+因为namenode node01是主节点
+/kkb/install/hadoop-2.6.0-cdh5.14.2/sbin/start-dfs.sh
+ /kkb/install/hadoop-2.6.0-cdh5.14.2/sbin/start-yarn.sh
+ /kkb/install/hadoop-2.6.0-cdh5.14.2/sbin/mr-jobhistory-daemon.sh start historyserver
+
+xxzx_7518522 21:41:23
+课件上缺少了脚本运行和停止的指令
+
+✨卡米✨ 21:42:29
+等好久了 
+高手
+
+hdfs上数据存储以block为单位进行存储
+数据文件按照128m大小进行切分
+300m =》 128 128 44
+
+有一个1M的文件 =》 有几个block？1个  占据多大空间？ 占据1m的空间
+
+占用空间的大小一定等于文件的大小
+
+哎呀 22:00:31
+文件存储在hdfs时，同一个block是否能存多个文件？ 
+不可以  一个block只能存储来自于一个文件的数据
+block怎么来的 
+
+李祝荣 22:01:20
+每个块都复制三个副本，
+这感觉变成高可用了，跟老师刚讲的横向扩展磁盘存储多个文件有点出入 
+副本-》 数据容错 1blk 1blk 1blk 
+
+高可用
+namenode*2 + datanode
+
+邪念 22:01:52
+block是最大128m 
+dui
+
+Carmen 22:02:05
+所以如果存小文件就会很浪费一个block吗 
+block 150byte元数据 -》 namenode内存
+1kb的文件、128m的文件哪个划算
+
+xxzx_9368308 22:02:14
+block 大小可以改吗
+
+林泽斌 22:02:35
+小文件浪费NameNode 
+对
+
+Carmen 22:03:53
+如果一个小文件是不是一个block只能存这个小文件 
+1m -> 1block 
+
+xxzx_3517504 22:04:06
+像parquet，或者avro文件，如果被partition成了100份，存储的时候是分在100个block里还是1个block？
+按照文件-> 128切分-> 计算block个数
+
+xxzx_4580434 22:04:48
+小文件有适合小文件的分布式文件系统
+
+企业中，确实会产生大量的小文件
+对小文件做处理
+
+王路平 22:06:55
+一个200m的文件和一个20m文件，总共是要3个block吗 
+对
+
+xxzx_9958089 22:07:44
+NAMENODE占多少内存 有多大内存 就是你的服务器的内存大小
+
+xxzx_7088706 22:09:10
+这么弄可以负载均衡和可靠，还有什么好处 
+hdfs角度；计算的角度：
+
+林泽斌 22:09:17
+副本设置三个还是两个比较好？预习资料是两个呀，我看老师的配置是3个 
+都行
+
+xxzx_9368308 22:09:27
+block 改了后，之前分好的还会重新调整大小吗 
+不会
+得重启集群
+
+✨卡米✨ 22:10:47
+一个元数据存同文件的所有blick信息吗？
+
+✨卡米✨ 22:12:45
+一个元数据信息存储同个文件的所有block信息吗
+一个文件：文件名、路径、有多少个block，每个block存储哪个datanode
+
+Carmen 22:12:48
+hdfs中一个block存了一个文件后如果没满128m，这个block还可以再存其他文件吗 
+不会
+一个block只存储一个文件的数据
+
+谢进 22:12:54
+namenode的数据是存在内存中的，datanode数据是存在硬盘上吗 
+namenode是元数据，存储再内存；datanode存储的是block，存储再本地磁盘
+
+高泽东 22:14:39
+namenode是否受限于jvm的堆大小
+肯定
+namenode是java进程
+
+邪念 22:14:41
+重启集群后还会重新分配数据？
+集群自动完成
+
+王铁军上海 22:15:45
+同问。本节课中提到的内存，和jvm 堆内存有什么关系
+namenode 使用的内存，就是它所在的jvm的堆内存
+
+✨卡米✨ 22:16:15
+存在内存中，如果主节点挂了，元数据会不会丢失
+会丢一部分
+secondarynamenode会展开
+
+
+远程的话：安装“向日葵”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

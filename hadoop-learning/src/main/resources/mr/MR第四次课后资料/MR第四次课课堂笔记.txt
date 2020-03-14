@@ -1,0 +1,247 @@
+声音、画面是否ok
+我这里没问题
+
+大家可以先想有哪些问题？
+有问题可以先打出来
+
+寇大兴 19:50:50
+工作中mr用的多么
+大数据框架到目前为止已经有了三代
+第一代：hadoop：hdfs+yarn+mapreduce
+	mr用的不是很多了，比如用他做数据的清洗
+	hdfs分布式存储系统：他的地位目前基本不会动摇
+	yarn：资源调度系统，目前也不会过时
+第二代：spark
+第三代：flink
+一种企业中有一些过去的job，不想冒险使用其他的框架实现，就还使用MR
+另外的，就是很多离线计算的部分被spark或者flink所替代
+
+hadoop当中的这些原理、实践等等，这些思想基本都是共同的
+因为，大数据框架都是在前代基础上，借鉴其精华，开发出了新框架
+
+蔺超 19:54:19
+离线的用的多吧
+也多
+
+小明同学 19:55:47
+PairWritable 计数器中这个类找不到
+自定义计数器：context.getCounter() 
+counter.increment()
+
+段宁建--大数据五期 19:55:48
+大数据有多少年了 怎么才第三代
+
+kkb同学 19:57:08
+老师，用idea远程连接Hadoop运行mapreduce能演示一下吗？自己配置一直很多问题。
+远程了连接；
+ 
+农夫三拳 19:58:30
+能不能在map中操作数据库，获取数据 
+DBInputFormat
+
+订单：
+1001,20150710,p0001,2
+1002,20150710,p0002,3
+1002,20150710,p0003,3
+1003,20150710,p0003,3
+
+商品：
+p0001,小米5,1000,2000
+p0002,锤子T1,1000,3000
+p0003,iphone 11,1000,8000
+
+结果：
+order product 
+1001,20150710,p0001,2 p0001,小米5,1000,2000
+1002,20150710,p0002,3 p0002,锤子T1,1000,3000
+1002,20150710,p0003,3 p0003,iphone 11,1000,8000
+1003,20150710,p0003,3 p0003,iphone 11,1000,8000
+
+select    a.id,a.date,b.name,b.category_id,b.price from t_order a join t_product   b on a.pid = b.id 
+
+join操作：
+reduce join
+
+map join
+
+1001,20150710,p0001,2	p0001,小米5,1000,2000
+1002,20150710,p0002,3	p0002,锤子T1,1000,3000
+1002,20150710,p0003,3	p0003,iphone 11,1000,8000
+1003,20150710,p0003,3	p0003,iphone 11,1000,8000
+
+xxzx_7196030 20:13:39
+父工程有pom, modul可以不用加吧 
+是的
+
+雷宏扬 20:40:12
+分布式缓存的数据是放在hdfs的tmp中还是在节点内存中通过网络拉取？ 
+首先是放到hdfs中
+然后，获取的时候，从分布式缓存中拉取到本地
+map task运行的jvm中
+
+hadoop
+	hdfs
+	mapreduce
+	yarn
+		主从架构
+		resourcemanager
+		nodemanger
+
+蒋子杰 21:25:20
+机器上有nodemanager  必须要有datanode吗？ 
+不是必须的
+但是，生产中基本都是如此配置同一个节点同事运行nodemanager+datanode
+
+四九 21:25:24
+yarnChild是真正执行任务的吧 
+由yarnchile启动task
+
+哲程是大腿😘 21:25:27
+6.2和9的区别？ 
+6是启动mrappmaster
+9是由mrappmaster为map task或者reduce task申请资源（容器）
+
+四九 21:25:53
+4、是输入路径吧？分片怎么跑到2的？
+通过10步
+
+sinc 21:26:59
+maptask会将执行完成的结果保存在文件中吗？
+ reduce task 拉取的maptask的结果是从其他机器的文件中取还是从内存取？ 
+溢出文件
+从其他节点的文件取
+
+kkb同学 21:27:04
+我印象中应该是map完成95%，reduce才开始启动吧 
+下去确认一下
+
+四九 21:27:08
+nodemanager和datanode在一台机器是不是效率会高一些？ 
+是的
+能够做到移动计算，不移动数据
+
+kkb同学 21:27:35
+运行过程中，如果MRAppMaster所在节点挂了怎么办？ 
+容错
+task运行失败
+	如果task运行失败，mrappmaster能够知道；然后，为此task再次申请容器，会有限考虑调度在其他的nm上
+	每个task 有4次的重试机会；如果超过，那么整个job失败
+mrappmaster运行失败
+	会启动一个新容器，运行appmaster；有2次机会
+
+appmaster ，maptask，reducetask  都运行在container中，container都是一个单独的进程？
+container就是一个资源的概念；其实本质是jvm
+
+
+欢乐马 21:29:07
+调度资源具体是说什么资源？split怎么跑到node manager上了？ 
+计算资源：cpu、内存、磁盘、网路io
+
+欢乐马 21:29:12
+7.初始化，生成一些对象，记录task完成情况，这个task是什么taskmr job，那就是记录map task或reduce task的完成情况
+
+每个job对应一个appmaster;一一对应
+
+
+X 21:37:01
+task运行失败应该会优先分配到备份分片的nm上吧 
+是的
+
+小明同学 21:37:49
+appmaster 是监控的一个完整的mapreduce过程吗 
+是的，监控当前job中所有的task的执行情况
+
+吴凡 21:38:32
+MRAppMaster肯定不会和map task或者reduce task在同一个节点吗 
+不一定
+完全看resourcemanager的调度情况
+
+kkb同学 21:39:48
+MRAppMaster挂了，重新起一个MRAppMaster，那么新的MRAppMaster能知道运行到一半的task的信息吗？ 
+能够知道
+运行的过程中，启动历史日志服务，任务完成情况会记录在内
+
+X 21:43:59
+MRAppMaster挂了，不回滚吗？mapTask读一半还能继续？ 
+mrappmaster1 挂之前，比如nm01上执行完成了map task1；记录在历史日志
+nm02上map task02执行一部分，记录没有完成
+mrappmaster1挂了
+重新启动一个mrappmaster2
+map task1不用重新运行；
+task2 会重新运行（原map task2的容器销毁，重新申请容器，运行task2）
+
+欢乐马 21:44:31
+程序在client node，怎么能运行在其他node上？ 
+
+容量调度器 apache版本默认使用
+公平调度器 cdh版本默认使用
+
+annuoa 22:10:33
+为什么job1、job2、job3不均分所有的呢？ 
+我们用的fair scheduler 就是这个特性
+
+可以设置整个集群只有一个队列，比如默认的default队列
+然后，1,2，3都提交到default一个队列就行
+
+何垣谛 22:11:36
+公平调度器，每次切换资源分配，对任务的计算有什么影响吗？？ 
+肯定会有影响，主要是运行的时间
+比如job1提交到A队列，
+
+胖虎ヾ 22:11:47
+怎么指定job提交到那个队列 
+mr main
+conf.set(queueu, "dev")
+
+叶玉龙-广州 22:12:04
+资源利用率达到100%是代表CPU，磁盘，网络等等的资源达到100%么？还是有所保留？ 
+这个主要看mr job他的主要资源
+cpu 20核
+内存 128G
+
+job使用10核，1G内存
+cpu就是它的主要资源
+
+杨晓宇 22:13:34
+一个队列的任务除了FIFO  还是其他策略吗？比如设置一个队列中job的优先级
+如果用容量调度器，使用的fifo
+如果使用的是公平调度器，每个队列里用什么模式调度，fair，fifo可以配置
+
+路少公 22:14:11
+队列里同时提交多个job，那会直接开始平分资源吗 
+如果使用的公平调度器
+就会评分
+
+提交JOB的时候设置mapreduce.queue.name
+conf.set("mapreduce.queue.name", "dev")
+
+通过调度器对列的方式，大致划分资源
+a队列 3 50%  cpu、内存
+b队列 3 50%
+
+哲程是大腿😘 22:36:44
+spark运行在yarn上面，spark需要和nm一个节点么？如果不是的话，nm也用同样的节点会不会去spark上面运行？ 
+spark就一个应用，类似于mr
+那你说mr需要跟和nm一个节点么
+不需要
+我们只需要一个mr的客户端；一个spark提交的客户端
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+

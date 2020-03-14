@@ -1,0 +1,357 @@
+声音、画面都OK吧
+好的，我这ok
+
+农夫三拳 19:50:35
+问题一： packet 经过ack校验失败，从新加入到queue尾部，打乱了写入顺序 不对文件造成损坏？  
+不会：每一个packet都有seqnum 序号
+问题二： chunk 512字节Byte  + chunksum 4字节 = 516字节 写入 packte  packet = header + chunksum + data = 64kb？ 这样是不是有问题？ 
+不会有问题；
+
+林志华 19:50:59
+有头部信息，不会
+
+xxzx_4580434 19:57:33
+今天看上传文件的源码看得脑瓜疼 
+可以看；但是，目前分清主次；先把上课的内容消化了；其他的，可以抽时间补充
+
+xxzx_9958089 19:58:34
+datanode会对每一个chunk自动生成校验码与checksum做对比吗 
+
+杨fan 19:59:52
+老师 protobuf和snappy的安装 是为了编译hadoop集群的安装包么 
+
+zxxx-88591 20:00:13
+你们不上班的吗，还能看源码，敲代码 
+
+
+
+=====
+小文件治理
+hdfs编程的方式
+hdfs har
+小明同学 21:07:53
+刚才那个har压缩，用的cp命令，这样不是在hdfs上存了两份吗，这个数据是怎么存的呢在block 
+文件，大小-》128m单位进行切分；每个block 3个副本
+
+xxzx_7581789 21:08:08
+我以前用的是eclipse，那老师在用这个开发工具的时候能否顺带说一下使用的快捷键呀？
+IDEA快捷键
+
+sequencefile解决
+	文件中有一个个的record记录；
+	每个record由key和value组成
+	
+mr核心思想：
+就是分而治之，然后合并
+	把一个大的任务，切分成很多小的任务，并行的执行
+	然后，将每个小的任务的结果，做一下汇总
+
+1000人一起来数钞票
+每个人：10元的一堆、20元、50、100
+
+mapreduce编程模型
+map 分而治之
+reduce 汇总
+
+MapReduce的开发一共有八个步骤其中
+map阶段分为2个步骤，
+shuffle阶段4个步骤，
+reduce阶段分为2个步骤
+
+Map阶段2个步骤
+第一步：设置inputFormat类，将我们的数据切分成key，value对（k1,v1），输入到第二步
+第二步：自定义map逻辑，处理我们第一步的输入数据(k1,v1)，然后转换成新的key，value对(k2,v2)进行输出
+
+shuffle阶段4个步骤
+第三步：对输出的key，value对(k2,v2)进行分区。
+相同key的数据发送到同一个reduce里面去，相同key合并，value形成一个集合
+第四步：对不同分区的数据按照相同的key进行排序
+第五步：对分组后的数据进行规约(combine操作)，降低数据的网络拷贝（可选步骤）
+第六步：对排序后的数据进行分组，分组的过程中，将相同key的value放到一个集合当中
+
+reduce阶段2个步骤
+第七步：对多个map的任务进行合并，排序，写reduce函数自己的逻辑，对输入的key，value对(k2,v2)进行处理，转换成新的key，value(k3,v3)对进行输出
+第八步：设置outputformat将输出的key，value对(k3,v3)数据进行保存到文件中
+
+Y0Y0 21:09:37
+游老师我想问下，在副本放置策略中，如果客户端就在本节点，那么副本就会放在本节点上，但是在我的理解中，HDFS是一个体系为内，客户端为外，外部要上传一个数据然后保存在HDFS这个体系中，为什么客户端会是本节点? 
+有可能
+
+段宁建--大数据五期 21:09:57
+听到云里雾里的 
+我有100T的数据，里边都是英文小说，现在让你做：计算一下，每个单词的出现的总个数？
+mr来解决
+
+不懂就问别人 21:40:41
+map里面每次new text(),耗性能不？
+耗费性能
+因为我们说分片里每行数据，生成一个kv对，调用一次map方法，map方法中如果大量的new对象，会频繁的gc
+
+
+hadoop jar hadoop_hdfs_operate-1.0-SNAPSHOT.jar com.kkb.hdfs.demo1.JobMain
+yarn jar hadoop_hdfs_operate-1.0-SNAPSHOT.jar com.kkb.mr.demo01.wordcount.WordCount xx xx 
+
+
+	<mirror>
+		<id>alimaven</id>
+		<name>aliyun maven</name>
+		<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		<mirrorOf>central</mirrorOf>        
+	</mirror>
+	
+哎呀 22:12:05
+reducetask数量是和分片数量相同吗？ 
+问到了关键点了
+reducetask数量  通过main方法中指定job.setNumReduceTasks(3);
+
+蛤蟆仔 22:12:29
+序列化和反序列化老师可以再讲讲么？不是很懂 
+java基础
+上网搜索一下序列化、反序列化
+
+小明同学 22:12:37
+刚打jar包放服务器运行 两个路径也要改吧 
+需要修改
+修改成hdfs的路径
+
+
+段宁建--大数据五期 22:12:40
+洗牌还没讲 
+
+xxzx_8001118 22:13:03
+老师微信多少？我今天刚上课 
+老游
+
+不懂就问别人 22:13:05
+如果values是全部进来，数据量大了，内存会不会爆？ 
+不会爆
+中间有归并merge，缩小数据量；
+
+annuoa 22:13:19
+map中可以有相同的key吗？例如一行中有两个hello,map后是（hello，1）（hello，1）；还是（hello，2）
+当然可以
+a,a,a,a,b,b,b
+可以
+
+map端
+hello,1 * 10000000
+-> 9hello, 10000000) => reduce 
+
+不懂就问别人 22:16:07
+我觉得hadoop reduce()这个迭代器装所有values这个地方设计不合理 
+有相应的解决措施
+
+杨晓宇 22:16:10
+jar在集群运行，会先像文件一样上传到HDFS吗？
+对的，将jar上传到某个节点就行
+然后hadoop jar xx.jar xxmain xxarg xxarg
+
+杨晓宇 22:17:14
+那map和reduce逻辑怎么在各个节点运行？
+好问题；
+yarn+mr结合： mr在yarn上的运行逻辑
+
+不懂就问别人 22:17:15
+我觉得会上传jar包，不然node2怎么知道
+就放大一个节点就行，不需要人工上传
+
+东方甲乙木 22:17:37
+intellij新建一个项目，然后创建子模块是个什么概念？没太明白intellij怎么组织代码结构的，子模块之间啥关系？ 
+
+
+
+=============
+墨小雨的猫 22:17:37
+我也觉得，任务相关的东西应该都会上传的hdfs 
+不需要手动上传，直接运行hadoop jar即可
+
+小明同学 22:17:49
+执行的命令 
+
+雷宏扬 22:18:38
+自动分发 
+对
+
+梁江涛 22:18:43
+mr是基于hdfs吗 
+可以这样理解；它从hdfs读取数据，结果再写回到hdfs
+
+杨晓宇 22:19:08
+感觉应该会分发到相应的dn
+对，框架会自动将需要运行的代码，拷贝到计算节点上；我们只需要运行hadoop jar即可
+这是yarn+mapreduce结合的部分，后边讲
+
+
+蔺超 22:20:31
+block个数 = split个数 = maptask个数  是这么理解么？ 
+对的；
+默认一个block 128m = split分片默认也是128m
+默认一个block对应一个分片，一个分片对应一个map任务
+
+何垣谛 22:20:41
+reducetask默认的数量是多少个？？ 
+写程序，自己设置job.setNumReduceTask(2)
+如果不设置，默认个数是1
+
+陈康-广州 22:20:41
+reduce task数不是与分区有关么 
+对的；reduce task有多少个，那么分区就有多少个；每个reduce task去一个分区的数据
+
+梁江涛 22:20:53
+不是说一般一个block一个maptask吗，本地文件哪里来的block 
+本地执行
+
+Y0Y0 22:20:54
+split一定等于maptask 
+对一个split对应一个map task
+
+Y0Y0 22:21:10
+但block不一定等于maptask的个数 
+对，split的分片大小有个计算公式：
+Math.max(minSize, Math.min(maxSize, blockSize));
+minSize = 1
+maxSize = Long.MAX_VALUE long类型的最大值
+blockSize=128
+所以split大小默认等于一个block的大小
+
+
+Eric Song 22:21:12
+默认ReduceTask数量是多少呀？ 
+默认是1
+
+xxzx_4580434 22:21:25
+mapreduce跑完之后打印的日志能讲解一下吗 
+看日志即可：每条日志基本上说明了意义
+20/01/09 12:43:26 INFO mapred.JobClient:  map 100% reduce 100%   map阶段、reduce阶段全部执行完成
+20/01/09 12:43:26 INFO mapred.JobClient: Job complete: job_local1395360952_0001 job的id号，框架自动分配
+20/01/09 12:43:26 INFO mapred.JobClient: Counters: 17  下边是一下计数器
+20/01/09 12:43:26 INFO mapred.JobClient:   File System Counters  文件系统的计数器组
+20/01/09 12:43:26 INFO mapred.JobClient:     FILE: Number of bytes read=77093214  这个组下一个个的计数器，读取的总的字节数，其他类似
+20/01/09 12:43:26 INFO mapred.JobClient:     FILE: Number of bytes written=82614030
+20/01/09 12:43:26 INFO mapred.JobClient:     FILE: Number of read operations=0
+20/01/09 12:43:26 INFO mapred.JobClient:     FILE: Number of large read operations=0
+20/01/09 12:43:26 INFO mapred.JobClient:     FILE: Number of write operations=0
+20/01/09 12:43:26 INFO mapred.JobClient:   Map-Reduce Framework map reduce框架的计数器组
+20/01/09 12:43:26 INFO mapred.JobClient:     Map input records=561438 map输入的总的记录数是561438
+20/01/09 12:43:26 INFO mapred.JobClient:     Map output records=1132650
+20/01/09 12:43:26 INFO mapred.JobClient:     Map output bytes=11424180
+20/01/09 12:43:26 INFO mapred.JobClient:     Input split bytes=294
+20/01/09 12:43:26 INFO mapred.JobClient:     Combine input records=0
+20/01/09 12:43:26 INFO mapred.JobClient:     Combine output records=0
+20/01/09 12:43:26 INFO mapred.JobClient:     Reduce input groups=11
+20/01/09 12:43:26 INFO mapred.JobClient:     Reduce shuffle bytes=0
+20/01/09 12:43:26 INFO mapred.JobClient:     Reduce input records=1132650
+20/01/09 12:43:26 INFO mapred.JobClient:     Reduce output records=11
+20/01/09 12:43:26 INFO mapred.JobClient:     Spilled Records=3397213
+20/01/09 12:43:26 INFO mapred.JobClient:     Total committed heap usage (bytes)=961544192
+
+Process finished with exit code 0
+
+
+
+Y0Y0 22:21:43
+可以人为设置split个数 控制map任务并行度 
+不需要设置；框架自动根据输入内容的大小及分片的大小，计算出需会有多少个map task
+
+小明同学 22:21:56
+下次讲到哪呀，我们好提前预习下，感觉不预习，有点听不懂了 
+对，预习
+
+蔺超 22:22:08
+为啥呢  一个分片不就是一个block么 
+上边已给出计算公式
+
+不懂就问别人 22:22:11
+比如200M的单词文件，被拆分出多少个map 
+2个map
+
+陈康-广州 22:22:53
+2 
+
+陈康-广州 22:23:03
+2个切片 
+
+Y0Y0 22:23:10
+200m的 128一个块 会被拆成2个块 但具体多少个map看split的个数 
+对
+
+
+不懂就问别人 22:23:53
+split个数谁确定？ 
+上边已提到
+
+林同学 22:23:54
+reduce数量一般根据什么东西去设置？？？ 
+job.setNumReduceTasks()
+
+雷宏扬 22:23:56
+我记得这个路径也是可以使用本地路径的，但是后果是map所在节点没有输入文件会报错，输出文件将在reduce节点 
+
+xxzx_8001118 22:23:57
+这些都会录制吧，我才进来学 
+
+蛤蟆仔 22:24:02
+map数=map数？ 
+分片数=map数
+一个分片对应一个map task
+
+Y0Y0 22:24:06
+reduce是根据人的 
+对，程序员自己设置
+
+Y0Y0 22:24:15
+如果说你只有10台机器 
+
+Y0Y0 22:24:22
+你想设置100个reduce也不行啊 
+每个服务器上，可以运行多个任务（map任务、reduce任务）
+后边讲
+
+林同学 22:25:20
+我怎么知道一个reduce能跑多少数据啊 
+看执行时打印的日志，上边已经给出
+
+蛤蟆仔 22:25:23
+map数=切片数？ 
+对
+
+Y0Y0 22:25:45
+是啊  切片数一定等于map任务数 
+
+xxzx_7581789 22:25:50
+map 里面有顺序吗 
+什么意思？
+
+Y0Y0 22:25:59
+我都是从别人那听来的  仅供参考。 
+
+刘勇-大数据005期 22:26:05
+本地运行的时候直接用Java API实现的map和reduce，那不是没有用到rm计算引擎，rm计算引擎在哪里呀
+还记得咱们说的hadoop运行模式吗？
+本地、伪分布式、分布式
+本地运行时，mr运行在一个进程中，以线程级别运行 
+
+Eric Song 22:28:23
+jar 集群运行，访问hdfs同一个文件会怎么样？ 
+会怎样？读呗
+
+雷宏扬 22:29:26
+本地运行：mr  on local 
+对
+
+雷宏扬 22:29:35
+集群运行：mr on yarn 
+对
+
+
+996 22:33:36
+第二节课后资料：repository.zip 是干啥用的？2.11GB！ 
+我的maven的本地仓库；如果自己下载maven仓库，下载不下来，可以直接用我的
+
+
+
+
+
+
+
+

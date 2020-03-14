@@ -1,0 +1,17 @@
+hadoop spark kaikeba bigdata flink kafka mapreduce
+hello world
+hello flume
+hadoop hive
+hive kafka
+flume storm
+hive oozie
+hello hello
+world world
+hadoop hadoop
+hello world
+hello flume
+hadoop hive
+hive kafka
+flume storm
+hive ooziehello hello
+world world
