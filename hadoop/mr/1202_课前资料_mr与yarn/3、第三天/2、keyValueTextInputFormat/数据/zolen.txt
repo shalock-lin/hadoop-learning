@@ -1,3 +1,0 @@
-hello@zolen@ input datas today 
-count@zolen@  hadoop  spark
-hello@zolen@  input some datas  to test 
