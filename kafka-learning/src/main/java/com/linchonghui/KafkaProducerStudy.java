@@ -30,8 +30,12 @@ public class KafkaProducerStudy {
         //2. 创建生产者对象
         Producer<String, String> producer = new KafkaProducer<String, String>(properties);
         for (int i =0 ; i < 100; i++){
+
             producer.send(new ProducerRecord<>("test-hello-kafka", Integer.toString(i), "Hello-kafka-"+i));
+
         }
+
+
         producer.close();
     }
 }

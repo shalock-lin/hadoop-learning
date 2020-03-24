@@ -1,4 +1,4 @@
-package com.linchonghui.partition;
+package com.linchonghui.compression;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -9,14 +9,11 @@ import java.util.Scanner;
 
 /**
  * @Author:linchonghui
- * @Date:20/3/2020
+ * @Date:21/3/2020
  * @Blog: https://github.com/Boomxiakalakaka/flink-learning
  */
-// TODO 测试轮询的策略  1.0.1还是随机，高版本已经默认为轮询了
-    // 思考一下，如果是按照key来进行分区的，相同key(业务)的消息是有序的，但是如果调大该topic的分区，那么相同业务的数据是否会乱序？
-    //如果给定了分区号，则直接发送到分区号里面；如果是有key的，则按key的hash值对分区取模
-    // kafka分区数量递增后，不仅打入分区的数据可能会乱序，消费者如果指定消费指定分区消费，可能会出现少读和脏读的问题
-public class RoundRobinPartition {
+//TODO 开启压缩可以很明显的减少网络传输和broker存储的磁盘  如果发现broker的cpu比较空闲，可以考虑开启
+public class GzipCompression {
 
     public static void main(String []args){
         //1. 配置属性
@@ -33,8 +30,8 @@ public class RoundRobinPartition {
         properties.put("batch.size", 16384);
         //1.6 配置可以延长多久发送数据，设置为0表示不等待，一有数据就发送
         properties.put("linger.ms", 0);
-        //1.7 配置分区策略
-        //properties.put("partitioner.class", "com.gec.kafkaclient.MyCustomerPartitons");
+        //1.7 开启GZIP压缩
+        properties.put("compression.type", "gzip");
         //1.8 指定key和value的序列化器
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -44,17 +41,11 @@ public class RoundRobinPartition {
         Scanner scan = new Scanner(System.in);
         // 判断是否还有输入
 
-       /* while (scan.hasNextLine()) {
+        while (scan.hasNextLine()) {
             String str = scan.nextLine();
-            producer.send(new ProducerRecord<>("RoundRobinTest",  str));
-        }*/
-
-        while (true) {
-            //String str = scan.nextLine();
-            producer.send(new ProducerRecord<>("RoundRobinTest",  "Test LogSegment...."));
+            producer.send(new ProducerRecord<>("GzipCompression",  str));
         }
 
-        //producer.close();
+        producer.close();
     }
-
 }
