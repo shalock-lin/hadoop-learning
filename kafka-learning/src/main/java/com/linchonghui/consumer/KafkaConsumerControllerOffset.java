@@ -1,4 +1,4 @@
-package com.linchonghui;
+package com.linchonghui.consumer;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

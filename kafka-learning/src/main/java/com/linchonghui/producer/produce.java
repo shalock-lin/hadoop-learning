@@ -1,4 +1,4 @@
-package com.linchonghui.produce;
+package com.linchonghui.producer;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
  * @Date:25/3/2020
  * @Blog: https://github.com/Boomxiakalakaka/flink-learning
  */
-public class Main {
+public class produce {
 
     public static Properties initProperties(){
         Properties properties = new Properties();

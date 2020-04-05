@@ -1,4 +1,4 @@
-package com.linchonghui.partition;
+package com.linchonghui.producer.partition;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Partitioner;
@@ -6,7 +6,6 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.Cluster;
 import org.apache.kafka.common.PartitionInfo;
-import org.apache.kafka.common.utils.Utils;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class MyPartition implements Partitioner {
         //1.6 配置可以延长多久发送数据，设置为0表示不等待，一有数据就发送
         properties.put("linger.ms", 0);
         //1.7 配置分区策略
-        properties.put("partitioner.class", "com.linchonghui.partition.MyPartition");
+        properties.put("partitioner.class", MyPartition.class.getName());
         //1.8 指定key和value的序列化器
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");

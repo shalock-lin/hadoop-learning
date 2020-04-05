@@ -1,4 +1,4 @@
-package com.linchonghui.compression;
+package com.linchonghui.producer.compression;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

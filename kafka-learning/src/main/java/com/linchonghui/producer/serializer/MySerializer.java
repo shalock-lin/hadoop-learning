@@ -1,4 +1,4 @@
-package com.linchonghui.serializer;
+package com.linchonghui.producer.serializer;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Serializer;
@@ -44,7 +44,7 @@ class LogSerializer implements Serializer<Log> {
 
     @Override
     public byte[] serialize(String s, Log log) {
-        if (null == log)
+        /*if (null == log)
             return null;
 
         byte [] logId,message;
@@ -71,7 +71,8 @@ class LogSerializer implements Serializer<Log> {
         } catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
-        return new byte[0];
+        return new byte[0];*/
+        return null;
     }
 
     @Override
@@ -80,8 +81,13 @@ class LogSerializer implements Serializer<Log> {
     }
 }
 
-@Data
+//@Data
 class Log {
     private String logId;
     private String message;
+
+
+
+
+
 }

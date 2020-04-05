@@ -16,6 +16,7 @@
         <module>hive-learning</module>
         <module>zookeeper-learning</module>
         <module>kafka-learning</module>
+        <module>jvm-learning</module>
     </modules>
 
 

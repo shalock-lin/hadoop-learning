@@ -1,4 +1,4 @@
-package com.linchonghui.interceptor;
+package com.linchonghui.producer.interceptor;
 
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
