@@ -20,6 +20,7 @@
         <module>jvm-learning</module>
         <module>feature-learning</module>
         <module>algorithm-learning</module>
+        <module>notes-learning</module>
     </modules>
 
 </project>
